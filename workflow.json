@@ -1,0 +1,237 @@
+{
+  "name": "Comparateur Prix - Ingestion Catalogues (Hybride)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "trigger-schedule",
+      "name": "Toutes les 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$vars.SUPABASE_URL}}/rest/v1/merchants?is_active=eq.true&feed_url=not.is.null&select=*",
+        "authentication": "none",
+        "options": {},
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$vars.SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$vars.SUPABASE_SERVICE_ROLE_KEY}}"
+            }
+          ]
+        }
+      },
+      "id": "get-merchants",
+      "name": "1. Récupérer marchands actifs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "loop-merchants",
+      "name": "2. Boucle par marchand",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$json.feed_url}}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "fetch-feed",
+      "name": "3. Récupérer flux catalogue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const merchant = $('2. Boucle par marchand').item.json;\n\nreturn $input.all().map(({ json: it }) => ({\n  json: {\n    merchant_id: merchant.id,\n    partnership_type: merchant.partnership_type,\n    base_affiliate_tag: merchant.base_affiliate_tag,\n    sku: String(it.sku || it.ean || it.reference || it.id),\n    name: it.name || it.title,\n    brand: it.brand || null,\n    price_xof: Number(it.price ?? it.price_xof ?? 0),\n    in_stock: it.stock !== undefined ? Boolean(it.stock) : true,\n    raw_url: it.url || it.link || it.image\n  }\n}));"
+      },
+      "id": "normalize-feed",
+      "name": "4. Normaliser les articles",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Applique la logique conditionnelle d'affiliation\nreturn items.map(({ json }) => {\n  let final_url = json.raw_url;\n\n  if (json.partnership_type === 'affiliate' && json.base_affiliate_tag) {\n    const sep = json.raw_url.includes('?') ? '&' : '?';\n    final_url = `${json.raw_url}${sep}tag=${encodeURIComponent(json.base_affiliate_tag)}`;\n  }\n  // Si 'direct' : final_url reste identique à raw_url (aucune modification)\n\n  return { json: { ...json, final_url } };\n});"
+      },
+      "id": "build-final-url",
+      "name": "5. Construire final_url (logique hybride)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$vars.SUPABASE_URL}}/rest/v1/rpc/upsert_offer_by_sku",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$vars.SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$vars.SUPABASE_SERVICE_ROLE_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { p_sku: $json.sku, p_name: $json.name, p_brand: $json.brand, p_merchant_id: $json.merchant_id, p_price_xof: $json.price_xof, p_in_stock: $json.in_stock, p_raw_url: $json.raw_url, p_final_url: $json.final_url } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "upsert-offer-rpc",
+      "name": "6. Upsert offre (via fonction SQL)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        -80
+      ]
+    }
+  ],
+  "connections": {
+    "Toutes les 6h": {
+      "main": [
+        [
+          {
+            "node": "1. Récupérer marchands actifs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1. Récupérer marchands actifs": {
+      "main": [
+        [
+          {
+            "node": "2. Boucle par marchand",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2. Boucle par marchand": {
+      "main": [
+        [],
+        [
+          {
+            "node": "3. Récupérer flux catalogue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3. Récupérer flux catalogue": {
+      "main": [
+        [
+          {
+            "node": "4. Normaliser les articles",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4. Normaliser les articles": {
+      "main": [
+        [
+          {
+            "node": "5. Construire final_url (logique hybride)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5. Construire final_url (logique hybride)": {
+      "main": [
+        [
+          {
+            "node": "6. Upsert offre (via fonction SQL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6. Upsert offre (via fonction SQL)": {
+      "main": [
+        [
+          {
+            "node": "2. Boucle par marchand",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
