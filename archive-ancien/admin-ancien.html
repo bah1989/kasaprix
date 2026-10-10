@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasaprix — Admin Marchands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --bg-soft:#F7F6F2; --text:#15171C; --text-muted:#6E7280;
+    --border:#E7E5DF; --orange:#FF6B1A; --green:#1D9A6C; --red:#D5443B;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg-soft);color:var(--text);font-family:'Inter',sans-serif;}
+  .container{max-width:920px;margin:0 auto;padding:32px 20px 80px;}
+  h1{font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;margin:0 0 4px;}
+  .sub{color:var(--text-muted);font-size:14px;margin:0 0 28px;}
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px;}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--text-muted);margin:0 0 5px;}
+  input,select{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;font-size:14px;font-family:inherit;margin-bottom:14px;}
+  input:focus,select:focus{outline:none;border-color:var(--orange);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){ .row2{grid-template-columns:1fr;} }
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:9px;font-weight:700;font-size:14px;padding:11px 18px;}
+  .btn-primary{background:var(--orange);color:#fff;}
+  .btn-secondary{background:var(--bg-soft);color:var(--text);border:1px solid var(--border);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;color:var(--text-muted);font-weight:600;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--border);}
+  td{padding:10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  .pill{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11.5px;font-weight:700;}
+  .pill.affiliate{background:#FFF1E5;color:var(--orange);}
+  .pill.direct{background:#E7F6EF;color:var(--green);}
+  .pill.inactive{background:#FBEAEA;color:var(--red);}
+  .link-edit{color:var(--orange);font-weight:700;font-size:13px;cursor:pointer;background:none;padding:0;}
+  #login-screen{max-width:360px;margin:80px auto;}
+  .msg{font-size:13px;margin-top:8px;}
+  .msg.error{color:var(--red);}
+  .msg.ok{color:var(--green);}
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="container">
+  <div class="card">
+    <h1>Accès admin</h1>
+    <p class="sub">Kasaprix — gestion des marchands</p>
+    <label>Mot de passe</label>
+    <input id="secret-input" type="password" placeholder="••••••••">
+    <button class="btn-primary" style="width:100%" id="login-btn">Se connecter</button>
+    <p class="msg error" id="login-error"></p>
+  </div>
+</div>
+
+<div id="admin-screen" class="container" style="display:none">
+  <h1>Marchands</h1>
+  <p class="sub">Configure le mode d'affiliation et le flux catalogue de chaque marchand.</p>
+
+  <div class="card">
+    <h3 id="form-title" style="margin:0 0 16px;font-family:'Manrope',sans-serif;">Nouveau marchand</h3>
+    <input type="hidden" id="m-id">
+    <div class="row2">
+      <div><label>Nom du marchand</label><input id="m-name" placeholder="Ex: Jumia CI"></div>
+      <div><label>Type de partenariat</label>
+        <select id="m-type">
+          <option value="direct">Direct (marchand local)</option>
+          <option value="affiliate">Affiliate (plateforme e-commerce)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div><label>Tag d'affiliation (si affiliate)</label><input id="m-tag" placeholder="Ex: aff_tag_bah_001"></div>
+      <div><label>Site web</label><input id="m-website" placeholder="https://..."></div>
+    </div>
+    <div class="row2">
+      <div><label>Feed URL (flux catalogue)</label><input id="m-feed-url" placeholder="https://..."></div>
+      <div><label>Format du flux</label>
+        <select id="m-feed-format">
+          <option value="">—</option>
+          <option value="json">JSON</option>
+          <option value="xml">XML</option>
+          <option value="csv">CSV</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div><label>WhatsApp (si marchand direct)</label><input id="m-whatsapp" placeholder="+225 07 00 00 00 00"></div>
+      <div><label>Téléphone</label><input id="m-phone" placeholder="+225 ..."></div>
+    </div>
+    <div class="row2">
+      <div><label>Statut</label>
+        <select id="m-active">
+          <option value="true">Actif</option>
+          <option value="false">Inactif</option>
+        </select>
+      </div>
+      <div></div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-primary" id="save-btn">Enregistrer</button>
+      <button class="btn-secondary" id="cancel-btn">Annuler / Nouveau</button>
+    </div>
+    <p class="msg" id="save-msg"></p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 16px;font-family:'Manrope',sans-serif;">Marchands existants</h3>
+    <table>
+      <thead><tr><th>Nom</th><th>Type</th><th>Flux</th><th>Statut</th><th></th></tr></thead>
+      <tbody id="merchants-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Ajouter une offre manuellement</h3>
+    <p class="sub" style="margin:0 0 16px;">Pour les marchands sans flux automatisable (ex: liens JForce Jumia) — un produit à la fois.</p>
+    <label>Marchand</label>
+    <select id="o-merchant"></select>
+    <div class="row2">
+      <div><label>Nom du produit</label><input id="o-name" placeholder="Ex: Samsung Galaxy A15"></div>
+      <div><label>Marque</label><input id="o-brand" placeholder="Ex: Samsung"></div>
+    </div>
+    <div class="row2">
+      <div><label>Prix (FCFA)</label><input id="o-price" type="number" placeholder="Ex: 95000"></div>
+      <div><label>En stock ?</label>
+        <select id="o-stock"><option value="true">Oui</option><option value="false">Non</option></select>
+      </div>
+    </div>
+    <label>Lien du produit (ex: lien JForce)</label>
+    <input id="o-link" placeholder="https://jforce.jumia.ci/s/...">
+    <label>URL de l'image (clic droit sur l'image du produit → Copier l'adresse de l'image)</label>
+    <input id="o-image" placeholder="https://...jpg">
+    <button class="btn-primary" id="offer-save-btn">Ajouter l'offre</button>
+    <p class="msg" id="offer-msg"></p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 16px;font-family:'Manrope',sans-serif;">Offres en ligne</h3>
+    <table>
+      <thead><tr><th>Produit</th><th>Marchand</th><th>Prix</th></tr></thead>
+      <tbody id="offers-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://bxljzktkxphdbalbmgcn.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_w3bjyu8CeKjESzbLI7eCkQ_xdGTo_qw";
+let ADMIN_SECRET = sessionStorage.getItem('kasaprix_admin_secret') || '';
+let merchants = [];
+
+async function rpc(name, body){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, {
+    method:'POST',
+    headers:{ apikey: SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function loadMerchants(){
+  try{
+    merchants = await rpc('admin_list_merchants', { p_admin_secret: ADMIN_SECRET });
+    renderTable();
+    populateMerchantSelect();
+    loadOffers();
+  }catch(e){
+    document.getElementById('login-error').textContent = 'Mot de passe incorrect.';
+    sessionStorage.removeItem('kasaprix_admin_secret');
+    showLogin();
+  }
+}
+
+function renderTable(){
+  const tbody = document.getElementById('merchants-tbody');
+  if(merchants.length === 0){
+    tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted)">Aucun marchand pour l'instant.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = merchants.map(m => `
+    <tr>
+      <td><strong>${m.name}</strong></td>
+      <td><span class="pill ${m.partnership_type}">${m.partnership_type === 'direct' ? 'Direct' : 'Affiliate'}</span></td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)">${m.feed_url || '—'}</td>
+      <td>${m.is_active ? '<span class="pill direct">Actif</span>' : '<span class="pill inactive">Inactif</span>'}</td>
+      <td><button class="link-edit" onclick="editMerchant('${m.id}')">Modifier</button></td>
+    </tr>
+  `).join('');
+}
+
+window.editMerchant = function(id){
+  const m = merchants.find(x => x.id === id);
+  if(!m) return;
+  document.getElementById('form-title').textContent = 'Modifier : ' + m.name;
+  document.getElementById('m-id').value = m.id;
+  document.getElementById('m-name').value = m.name || '';
+  document.getElementById('m-type').value = m.partnership_type || 'direct';
+  document.getElementById('m-tag').value = m.base_affiliate_tag || '';
+  document.getElementById('m-website').value = m.website_url || '';
+  document.getElementById('m-feed-url').value = m.feed_url || '';
+  document.getElementById('m-feed-format').value = m.feed_format || '';
+  document.getElementById('m-whatsapp').value = m.contact_whatsapp || '';
+  document.getElementById('m-phone').value = m.contact_phone || '';
+  document.getElementById('m-active').value = String(m.is_active);
+  window.scrollTo(0,0);
+};
+
+function resetForm(){
+  document.getElementById('form-title').textContent = 'Nouveau marchand';
+  ['m-id','m-name','m-tag','m-website','m-feed-url','m-whatsapp','m-phone'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('m-type').value = 'direct';
+  document.getElementById('m-feed-format').value = '';
+  document.getElementById('m-active').value = 'true';
+  document.getElementById('save-msg').textContent = '';
+}
+
+document.getElementById('cancel-btn').addEventListener('click', resetForm);
+
+document.getElementById('save-btn').addEventListener('click', async () => {
+  const msg = document.getElementById('save-msg');
+  const name = document.getElementById('m-name').value.trim();
+  if(!name){ msg.textContent = 'Le nom du marchand est requis.'; msg.className='msg error'; return; }
+  try{
+    await rpc('admin_upsert_merchant', {
+      p_admin_secret: ADMIN_SECRET,
+      p_id: document.getElementById('m-id').value || null,
+      p_name: name,
+      p_partnership_type: document.getElementById('m-type').value,
+      p_base_affiliate_tag: document.getElementById('m-tag').value.trim() || null,
+      p_feed_url: document.getElementById('m-feed-url').value.trim() || null,
+      p_feed_format: document.getElementById('m-feed-format').value || null,
+      p_contact_whatsapp: document.getElementById('m-whatsapp').value.trim() || null,
+      p_contact_phone: document.getElementById('m-phone').value.trim() || null,
+      p_website_url: document.getElementById('m-website').value.trim() || null,
+      p_is_active: document.getElementById('m-active').value === 'true'
+    });
+    msg.textContent = 'Marchand enregistré.';
+    msg.className = 'msg ok';
+    resetForm();
+    loadMerchants();
+  }catch(e){
+    msg.textContent = "Erreur : le tag d'affiliation est peut-être manquant pour un marchand affiliate.";
+    msg.className = 'msg error';
+  }
+});
+
+function populateMerchantSelect(){
+  const sel = document.getElementById('o-merchant');
+  sel.innerHTML = merchants.filter(m => m.is_active).map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+}
+
+async function loadOffers(){
+  try{
+    const offers = await rpc('admin_list_offers', { p_admin_secret: ADMIN_SECRET });
+    const tbody = document.getElementById('offers-tbody');
+    if(offers.length === 0){
+      tbody.innerHTML = `<tr><td colspan="3" style="color:var(--text-muted)">Aucune offre pour l'instant.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = offers.map(o => `
+      <tr>
+        <td><strong>${o.product_name}</strong></td>
+        <td>${o.merchant_name}</td>
+        <td>${Number(o.price_xof).toLocaleString('fr-FR')} FCFA</td>
+      </tr>
+    `).join('');
+  }catch(e){}
+}
+
+document.getElementById('offer-save-btn').addEventListener('click', async () => {
+  const msg = document.getElementById('offer-msg');
+  const name = document.getElementById('o-name').value.trim();
+  const merchantId = document.getElementById('o-merchant').value;
+  const price = parseFloat(document.getElementById('o-price').value);
+  const link = document.getElementById('o-link').value.trim();
+  if(!name || !merchantId || !price || !link){
+    msg.textContent = 'Nom, marchand, prix et lien sont requis.';
+    msg.className = 'msg error';
+    return;
+  }
+  try{
+    await rpc('admin_upsert_offer_manual', {
+      p_admin_secret: ADMIN_SECRET,
+      p_merchant_id: merchantId,
+      p_product_name: name,
+      p_brand: document.getElementById('o-brand').value.trim() || null,
+      p_price_xof: price,
+      p_in_stock: document.getElementById('o-stock').value === 'true',
+      p_link: link,
+      p_image_url: document.getElementById('o-image').value.trim() || null
+    });
+    msg.textContent = 'Offre ajoutée.';
+    msg.className = 'msg ok';
+    ['o-name','o-brand','o-price','o-link','o-image'].forEach(id => document.getElementById(id).value = '');
+    loadOffers();
+  }catch(e){
+    msg.textContent = "Erreur lors de l'ajout de l'offre.";
+    msg.className = 'msg error';
+  }
+});
+
+function showLogin(){
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('admin-screen').style.display = 'none';
+}
+function showAdmin(){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'block';
+  loadMerchants();
+}
+
+document.getElementById('login-btn').addEventListener('click', () => {
+  ADMIN_SECRET = document.getElementById('secret-input').value.trim();
+  sessionStorage.setItem('kasaprix_admin_secret', ADMIN_SECRET);
+  showAdmin();
+});
+
+if(ADMIN_SECRET) showAdmin(); else showLogin();
+</script>
+</body>
+</html>
