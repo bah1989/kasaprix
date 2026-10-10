@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kasaprix-elyseebah-6633.vercel.app/api/sitemap

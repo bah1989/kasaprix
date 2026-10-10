@@ -1,0 +1,40 @@
+{
+  "rewrites": [
+    {
+      "source": "/og/default.jpg",
+      "destination": "/api/og"
+    },
+    {
+      "source": "/og/:id.jpg",
+      "destination": "/api/og?id=:id"
+    },
+    {
+      "source": "/produit/:id",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/categorie/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/marchand/:id",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/bons-plans",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/marchands",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/espace-pro",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/classement",
+      "destination": "/index.html"
+    }
+  ]
+}

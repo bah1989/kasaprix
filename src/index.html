@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasaprix — Comparez, trouvez le meilleur prix</title>
+<meta name="description" content="Comparez les prix de Jumia et des meilleures boutiques d'Abidjan en un clic. Trouvez le prix le plus bas, marché par marché.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kasaprix">
+<meta property="og:title" content="Kasaprix — Comparez, trouvez le meilleur prix">
+<meta property="og:description" content="Comparez les prix de Jumia et des meilleures boutiques d'Abidjan en un clic.">
+<meta property="og:url" content="https://kasaprix-elyseebah-6633.vercel.app/">
+<meta name="twitter:card" content="summary">
+<link rel="canonical" href="https://kasaprix-elyseebah-6633.vercel.app/">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#FF6B1A">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kasaprix">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-soft:#F7F6F2;
+    --text:#15171C;
+    --text-muted:#6E7280;
+    --border:#E7E5DF;
+    --orange:#FF6B1A;
+    --orange-dark:#E15A0E;
+    --gold:#F5B400;
+    --green:#1D9A6C;
+    --green-soft:#E7F6EF;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg-soft);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+  .container{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:10;
+  }
+  .header-inner{
+    display:flex;align-items:center;gap:28px;
+    padding:16px 20px;max-width:1080px;margin:0 auto;
+    flex-wrap:wrap;
+  }
+  .logo{display:flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-weight:800;font-size:22px;flex:0 0 auto;text-decoration:none;color:var(--text);}
+  .logo .prix{color:var(--orange);}
+  .logo svg{flex-shrink:0;}
+  .searchbar{flex:1 1 320px;position:relative;min-width:220px;}
+  .searchbar input{
+    width:100%;border:1.5px solid var(--border);border-radius:100px;
+    padding:12px 20px 12px 44px;font-size:15px;font-family:inherit;
+    background:var(--bg-soft);color:var(--text);
+  }
+  .searchbar input:focus{outline:none;border-color:var(--orange);background:var(--bg);}
+  .searchbar svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-muted);}
+  nav.main-nav{display:flex;gap:22px;flex:0 0 auto;}
+  nav.main-nav a{font-size:14px;font-weight:600;text-decoration:none;color:var(--text);white-space:nowrap;}
+  @media (max-width:820px){ nav.main-nav{display:none;} }
+
+  /* ---------- Hero / filtres rapides ---------- */
+  .hero{padding:36px 0 28px;}
+  .hero h1{
+    font-family:'Manrope',sans-serif;font-weight:800;
+    font-size:clamp(26px,4vw,38px);line-height:1.15;margin:0 0 10px;max-width:16ch;
+  }
+  .hero p.reassure{color:var(--text-muted);font-size:15px;margin:0 0 24px;}
+  .chip-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{
+    display:flex;align-items:center;gap:8px;
+    background:var(--bg);border:1px solid var(--border);border-radius:100px;
+    padding:9px 16px;font-size:14px;font-weight:600;text-decoration:none;color:var(--text);
+  }
+  .chip:hover{border-color:var(--orange);}
+  .chip.active{background:var(--orange);color:#fff;border-color:var(--orange);}
+  .badge-zone-local{display:inline-flex;align-items:center;gap:5px;background:var(--green-soft);color:var(--green);font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;width:fit-content;}
+  .badge-zone-delivery{display:inline-flex;align-items:center;gap:5px;background:var(--bg-soft);color:var(--text-muted);font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;width:fit-content;border:1px solid var(--border);}
+
+  /* ---------- Section titres ---------- */
+  .section{padding:32px 0;}
+  .section h2{font-family:'Manrope',sans-serif;font-weight:800;font-size:22px;margin:0 0 18px;}
+
+  /* ---------- Deal grid ---------- */
+  .deal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+  .deal-card{
+    background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px;display:flex;flex-direction:column;gap:10px;
+    text-decoration:none;color:var(--text);
+    transition:box-shadow .15s ease, border-color .15s ease;
+    position:relative;
+  }
+  .sponsor-ribbon{
+    position:absolute;top:10px;left:10px;z-index:2;
+    background:var(--gold);color:#fff;font-size:10.5px;font-weight:800;
+    padding:3px 9px;border-radius:100px;letter-spacing:.3px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  }
+  .compare-check{
+    position:absolute;top:10px;right:10px;z-index:3;
+    width:26px;height:26px;border-radius:8px;
+    background:rgba(255,255,255,0.92);border:1.5px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;color:var(--text-muted);
+    box-shadow:0 2px 6px rgba(0,0,0,0.12);
+  }
+  .compare-check.active{background:var(--orange);border-color:var(--orange);color:#fff;}
+  .compare-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    background:var(--text);color:#fff;padding:12px 20px;
+    display:none;align-items:center;justify-content:space-between;gap:12px;
+    box-shadow:0 -4px 16px rgba(0,0,0,0.15);
+  }
+  .compare-bar.visible{display:flex;}
+  .compare-bar .count{font-size:14px;font-weight:600;}
+  .compare-bar .actions{display:flex;gap:10px;}
+  .compare-bar button{border-radius:8px;padding:9px 16px;font-size:13.5px;font-weight:700;}
+  .compare-bar .btn-go{background:var(--orange);color:#fff;}
+  .compare-bar .btn-clear{background:transparent;color:#fff;opacity:0.7;text-decoration:underline;}
+  .compare-table-wrap{overflow-x:auto;}
+  .compare-table{width:100%;border-collapse:collapse;min-width:480px;}
+  .compare-table th, .compare-table td{padding:14px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top;}
+  .compare-table th{color:var(--text-muted);font-size:12.5px;font-weight:600;width:140px;}
+  .compare-col-thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;}
+  .compare-col-name{font-weight:700;font-size:14.5px;margin-top:8px;}
+  .compare-remove{background:none;color:var(--text-muted);font-size:12px;text-decoration:underline;margin-top:6px;padding:0;}
+  .compare-price{font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;}
+  .deal-card:hover{border-color:var(--orange);box-shadow:0 4px 18px rgba(0,0,0,0.06);}
+  .deal-thumb{
+    width:100%;aspect-ratio:1;border-radius:10px;
+    background:linear-gradient(135deg,var(--gold),var(--orange));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Manrope',sans-serif;font-weight:800;color:#fff;font-size:28px;
+  }
+  .deal-brand{font-size:12px;color:var(--text-muted);font-weight:600;}
+  .deal-name{font-size:14.5px;font-weight:700;line-height:1.3;min-height:38px;}
+  .price-row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+  .price-now{font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;}
+  .price-old{font-size:13px;color:var(--text-muted);text-decoration:line-through;}
+  .badge-cheapest{
+    display:inline-flex;align-items:center;gap:5px;
+    background:var(--green-soft);color:var(--green);
+    font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;width:fit-content;
+  }
+  .compare-btn{
+    margin-top:4px;background:var(--orange);color:#fff;border-radius:9px;
+    padding:10px 14px;font-size:13.5px;font-weight:700;text-align:center;
+  }
+  .deal-card:hover .compare-btn{background:var(--orange-dark);}
+
+  .empty-state{
+    text-align:center;padding:56px 24px;color:var(--text-muted);
+    border:1.5px dashed var(--border);border-radius:var(--radius);background:var(--bg);
+  }
+  .empty-state strong{display:block;color:var(--text);font-size:16px;margin-bottom:6px;font-family:'Manrope',sans-serif;}
+
+  /* ---------- Page produit / matrice ---------- */
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--text-muted);text-decoration:none;margin:24px 0 20px;}
+  .product-header{display:flex;gap:20px;align-items:flex-start;margin-bottom:28px;flex-wrap:wrap;}
+  .product-thumb{
+    width:96px;height:96px;border-radius:14px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--gold),var(--orange));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Manrope',sans-serif;font-weight:800;color:#fff;font-size:32px;
+  }
+  .product-title{font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;margin:0 0 6px;}
+  .product-meta{color:var(--text-muted);font-size:14.5px;}
+  .product-meta strong{color:var(--text);}
+
+  .matrix-layout{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start;}
+  @media (max-width:800px){ .matrix-layout{grid-template-columns:1fr;} }
+
+  .offer-row{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:var(--bg);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;margin-bottom:10px;
+  }
+  .offer-row.winner{
+    border-color:var(--green);background:var(--green-soft);
+    position:relative;
+  }
+  .winner-tag{
+    position:absolute;top:-11px;left:16px;background:var(--green);color:#fff;
+    font-size:11px;font-weight:800;padding:3px 10px;border-radius:100px;
+  }
+  .offer-merchant{display:flex;align-items:center;gap:12px;}
+  .merchant-avatar{
+    width:38px;height:38px;border-radius:9px;background:var(--bg-soft);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--text-muted);
+  }
+  .merchant-info .name{font-weight:700;font-size:14.5px;}
+  .merchant-info .type{font-size:12px;color:var(--text-muted);}
+  .offer-action{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .offer-price{font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;}
+  .offer-cta{
+    text-decoration:none;font-size:13px;font-weight:700;
+    padding:10px 16px;border-radius:9px;white-space:nowrap;
+  }
+  .offer-cta.buy{background:var(--orange);color:#fff;}
+  .offer-cta.whatsapp{background:#25D366;color:#fff;}
+  .offer-cta.secondary{background:transparent;color:var(--text-muted);border:1.5px solid var(--border);}
+  .offer-cta.secondary:hover{border-color:var(--orange);color:var(--text);}
+
+  .alert-box{
+    background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);
+    padding:20px;position:sticky;top:90px;
+  }
+  .alert-box h3{font-family:'Manrope',sans-serif;font-size:16px;margin:0 0 8px;}
+  .alert-box p{font-size:13.5px;color:var(--text-muted);margin:0 0 14px;}
+  .alert-box input, .alert-box select{
+    width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;
+    font-size:14px;font-family:inherit;margin-bottom:10px;
+  }
+  .alert-box input:focus, .alert-box select:focus{outline:none;border-color:var(--orange);}
+  .alert-submit{
+    width:100%;background:var(--text);color:#fff;border-radius:9px;padding:11px;
+    font-size:14px;font-weight:700;
+  }
+  .alert-confirm{font-size:13px;color:var(--green);font-weight:600;margin-top:10px;display:none;}
+  .msg.error{font-size:13px;color:#D5443B;font-weight:600;margin-top:10px;}
+
+  footer{margin-top:48px;padding:28px 0;border-top:1px solid var(--border);color:var(--text-muted);font-size:12.5px;}
+
+  #view-home, #view-product, #view-pro, #view-compare{display:none;}
+  #view-home.active, #view-product.active, #view-pro.active, #view-compare.active{display:block;}
+
+.alert-box.alert-prominent{border:2px solid #25D366;background:#F1FBF5;box-shadow:0 6px 20px rgba(37,211,102,.15);}
+.alert-prominent .phone-row{display:flex;align-items:stretch;gap:0;margin:10px 0;}
+.alert-prominent .phone-prefix{display:flex;align-items:center;padding:0 12px;background:#E3F5EA;border:1px solid #cfe9d8;border-right:0;border-radius:10px 0 0 10px;font-weight:700;font-size:15px;}
+.alert-prominent .phone-row input{margin:0;border-radius:0 10px 10px 0;flex:1;min-width:0;font-size:16px;}
+.alert-prominent .deals-opt{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:8px 0 12px;cursor:pointer;}
+.alert-prominent .deals-opt input{width:auto;margin-top:2px;}
+.alert-prominent .alert-submit{background:#25D366;color:#fff;font-size:16px;padding:14px;width:100%;}
+.alert-prominent .privacy-note{font-size:12px;color:#6b7280;margin:10px 0 0;}
+.alert-jump{display:inline-flex;align-items:center;gap:6px;margin:10px 0 0;padding:10px 16px;border:0;border-radius:999px;background:#25D366;color:#fff;font-weight:700;font-size:14px;cursor:pointer;}
+
+.m-extra{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:center;margin-top:4px;font-size:12px;color:#555;}
+.m-extra .m-rating{color:#C98A00;}
+.m-extra .m-rating strong{color:#222;}
+.m-extra .m-rating.m-none{color:#8a8a8a;}
+.m-extra .m-deliv{color:#2b6b45;}
+.m-review-btn{border:0;background:none;color:#0a7a3d;font-weight:700;font-size:12px;cursor:pointer;padding:0;text-decoration:underline;}
+#rev-modal{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;}
+#rev-modal .rev-card{background:#fff;color:#111;border-radius:16px;max-width:440px;width:100%;max-height:90vh;overflow:auto;padding:20px;}
+#rev-modal h3{margin:0 0 10px;}
+#rev-modal .rev-item{border-top:1px solid #eee;padding:8px 0;font-size:14px;}
+#rev-modal .rev-item p{margin:4px 0 0;}
+#rev-modal .rev-form{border-top:2px solid #eee;margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:8px;}
+#rev-modal select,#rev-modal textarea,#rev-modal input{font-size:16px;padding:10px;border:1px solid #ddd;border-radius:10px;width:100%;box-sizing:border-box;}
+#rev-modal .rev-send{background:#25D366;color:#fff;border:0;border-radius:10px;padding:12px;font-weight:700;font-size:15px;cursor:pointer;}
+#rev-modal .rev-close{margin-top:10px;border:0;background:none;color:#666;cursor:pointer;text-decoration:underline;}
+#rev-modal .rev-msg{margin:0;font-size:13px;font-weight:600;}
+.ph-box{margin:18px 0;padding:16px;border:1px solid #e5e5e5;border-radius:14px;background:#fff;color:#111;}
+.ph-box h3{margin:0 0 4px;font-size:16px;}
+.ph-box svg{width:100%;height:150px;display:block;margin:8px 0;background:#F6FBF8;border-radius:8px;}
+.ph-box p{margin:2px 0;font-size:13px;}
+
+.rank-cta{display:inline-block;margin-top:14px;padding:12px 18px;border-radius:999px;background:#FF6B1A;color:#fff;font-weight:700;text-decoration:none;font-size:15px;}
+.rk-tools{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px;align-items:center;}
+.rk-tools input[type=search],.rk-tools select{font-size:15px;padding:10px 12px;border:1px solid #ddd;border-radius:10px;background:#fff;color:#111;min-width:0;}
+.rk-tools input[type=search]{flex:1 1 220px;}
+.rk-tools label{font-size:14px;display:flex;gap:6px;align-items:center;}
+.rk-status{font-size:13px;color:#666;margin:4px 0 10px;}
+.rk-list{display:flex;flex-direction:column;gap:6px;}
+.rk-row{display:grid;grid-template-columns:34px 1fr auto;grid-template-areas:'n name price' 'n meta var';gap:2px 10px;align-items:center;padding:10px 12px;border:1px solid #e6e6e6;border-radius:12px;background:#fff;color:#111;text-decoration:none;}
+.rk-row:hover{border-color:#FF6B1A;}
+.rk-n{grid-area:n;font-weight:800;color:#999;text-align:center;}
+.rk-row:nth-child(-n+3) .rk-n{color:#FF6B1A;}
+.rk-name{grid-area:name;font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;}
+.rk-meta{grid-area:meta;font-size:12px;color:#777;}
+.rk-price{grid-area:price;font-weight:800;font-size:16px;text-align:right;white-space:nowrap;}
+.rk-var{grid-area:var;text-align:right;font-size:12px;font-weight:700;white-space:nowrap;}
+.rk-down{color:#0a7a3d;}
+.rk-up{color:#D5443B;}
+.rk-flat{color:#999;font-weight:500;}
+
+.share-btn{display:inline-flex;align-items:center;gap:6px;margin:10px 0 0 8px;padding:10px 16px;border:1px solid #cfd6dd;border-radius:999px;background:#fff;color:#111;font-weight:700;font-size:14px;cursor:pointer;}
+#share-modal{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:9999;}
+@media(min-width:600px){#share-modal{align-items:center;padding:16px;}}
+#share-modal .sh-card{background:#fff;color:#111;border-radius:16px 16px 0 0;width:100%;max-width:440px;padding:20px;}
+@media(min-width:600px){#share-modal .sh-card{border-radius:16px;}}
+#share-modal h3{margin:0 0 4px;}
+#share-modal .sh-text{font-size:13px;color:#555;background:#f5f5f5;border-radius:10px;padding:10px;margin:8px 0 12px;white-space:pre-wrap;word-break:break-word;}
+#share-modal .sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+#share-modal .sh-grid a,#share-modal .sh-grid button{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border-radius:10px;border:0;color:#fff;font-weight:700;font-size:14px;text-decoration:none;cursor:pointer;}
+#share-modal .sh-wa{background:#25D366;}
+#share-modal .sh-fb{background:#1877F2;}
+#share-modal .sh-x{background:#111;}
+#share-modal .sh-tg{background:#229ED9;}
+#share-modal .sh-cp{background:#666;grid-column:1 / -1;}
+#share-modal .sh-close{margin-top:10px;border:0;background:none;color:#666;cursor:pointer;text-decoration:underline;width:100%;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="#FF6B1A" stroke-width="2.4"/><path d="M15.5 15.5L20 20" stroke="#FF6B1A" stroke-width="2.4" stroke-linecap="round"/><path d="M8 11l1.7 1.7L13.5 9" stroke="#FF6B1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Kasa<span class="prix">prix</span>
+    </a>
+    <div class="searchbar">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search-input" type="text" placeholder="Quel produit cherchez-vous au meilleur prix ? (Ex: iPhone 15, TV Samsung, Riz 5kg...)">
+    </div>
+    <nav class="main-nav">
+      <a href="/">Catégories</a>
+      <a href="/classement">Classement des prix</a>
+      <a href="/bons-plans">Bons plans du jour</a>
+      <a href="/marchands">Marchands partenaires</a>
+      <a href="/espace-pro">Espace Pro</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ============ VUE CLASSEMENT ============ -->
+  <div id="view-rank" style="display:none">
+    <section class="hero" style="padding-bottom:8px">
+      <h1>Classement des prix</h1>
+      <p class="reassure">Tous les articles de tous les magasins, du moins cher au plus cher. ▼ le prix a baissé · ▲ le prix a augmenté.</p>
+    </section>
+    <div class="rk-tools">
+      <input id="rank-q" type="search" placeholder="Filtrer : produit, marque, magasin…">
+      <select id="rank-merchant"><option value="">Tous les magasins</option></select>
+      <select id="rank-dir"><option value="asc">Du moins cher au plus cher</option><option value="desc">Du plus cher au moins cher</option></select>
+      <label><input type="checkbox" id="rank-drops"> Seulement les baisses</label>
+    </div>
+    <p id="rank-status" class="rk-status"></p>
+    <div id="rank-list" class="rk-list"></div>
+  </div>
+
+  <!-- ============ VUE ACCUEIL ============ -->
+  <div id="view-home">
+    <section class="hero">
+      <h1>Comparez, trouvez le prix le plus bas.</h1>
+      <p class="reassure">Comparez les prix de Jumia et des meilleures boutiques d'Abidjan en un clic.</p>
+      <div class="chip-row" id="category-chips"></div>
+      <div class="chip-row" id="zone-chips" style="margin-top:10px;"></div>
+      <a href="/classement" class="rank-cta">📊 Classement de tous les prix, du moins cher au plus cher</a>
+    </section>
+
+    <section class="section">
+      <h2 id="deals-title">Les meilleures affaires du jour</h2>
+      <div id="deals-grid" class="deal-grid"></div>
+    </section>
+  </div>
+
+  <!-- ============ VUE PRODUIT / MATRICE ============ -->
+  <div id="view-product">
+    <a href="/" class="back-link">&larr; Retour aux résultats</a>
+    <div class="product-header">
+      <div class="product-thumb" id="p-thumb">?</div>
+      <div>
+        <h1 class="product-title" id="p-title">—</h1>
+        <p class="product-meta" id="p-meta">Chargement…</p>
+      <button class="alert-jump" type="button" onclick="document.getElementById('alert-box').scrollIntoView({behavior:'smooth',block:'center'})">🔔 Être alerté si le prix baisse</button>
+      <button class="share-btn" type="button" onclick="shareProduct()">📤 Partager</button>
+      </div>
+    </div>
+
+    <div class="matrix-layout">
+      <div id="offers-list"></div>
+
+      <div class="alert-box alert-prominent" id="alert-box">
+        <h3>🔔 Ce prix est trop haut ?</h3>
+        <p>Laisse ton numéro WhatsApp : on te prévient dès que ce produit baisse de prix.</p>
+        <div class="phone-row"><span class="phone-prefix">🇨🇮 +225</span><input id="alert-contact" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="07 00 00 00 00"></div>
+        <label class="deals-opt"><input type="checkbox" id="alert-deals" checked> <span>Recevoir aussi les bons plans de la semaine</span></label>
+        <button class="alert-submit" id="alert-submit">🔔 Me prévenir sur WhatsApp</button>
+        <p class="msg error" id="alert-error" style="display:none"></p>
+        <p class="alert-confirm" id="alert-confirm">✓ C'est noté ! On te prévient sur WhatsApp dès que le prix baisse.</p>
+        <p class="privacy-note">Ton numéro sert uniquement aux alertes de prix Kasaprix. Jamais revendu ni partagé.</p>
+      </div>
+    </div>
+  </div>
+  <!-- ============ VUE ESPACE PRO ============ -->
+  <div id="view-pro">
+    <a href="/" class="back-link">&larr; Retour à l'accueil</a>
+    <section class="hero" style="padding-top:8px;">
+      <h1 style="max-width:20ch;">Vendez plus, sans rien changer à votre activité.</h1>
+      <p class="reassure" style="max-width:52ch;">Kasaprix met vos produits sous les yeux de clients qui cherchent déjà le meilleur prix. Inscription gratuite pour les marchands locaux — aucune commission, aucun engagement.</p>
+    </section>
+    <div class="matrix-layout">
+      <div>
+        <div class="offer-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <strong>Visibilité gratuite</strong>
+          <span style="color:var(--text-muted);font-size:14px;">Vos produits apparaissent dans les comparaisons de prix, sans frais.</span>
+        </div>
+        <div class="offer-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <strong>Du trafic direct vers vous</strong>
+          <span style="color:var(--text-muted);font-size:14px;">Les clients vous contactent directement par WhatsApp — pas d'intermédiaire.</span>
+        </div>
+        <div class="offer-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <strong>Vous gardez le contrôle</strong>
+          <span style="color:var(--text-muted);font-size:14px;">Vos prix, votre stock, vos conditions — Kasaprix ne fait que comparer.</span>
+        </div>
+      </div>
+      <div class="alert-box" style="position:static;">
+        <h3>Devenir partenaire</h3>
+        <p>Ta demande sera vérifiée avant mise en ligne.</p>
+        <input id="pro-name" type="text" placeholder="Nom de votre boutique / entreprise">
+        <input id="pro-whatsapp" type="text" placeholder="Numéro WhatsApp">
+        <input id="pro-phone" type="text" placeholder="Téléphone (optionnel)">
+        <input id="pro-website" type="text" placeholder="Site web (optionnel)">
+        <button class="alert-submit" id="pro-submit">Envoyer ma demande</button>
+        <p class="alert-confirm" id="pro-confirm">✓ Demande envoyée, on te recontacte bientôt.</p>
+        <p class="msg error" id="pro-error" style="display:none;"></p>
+        <p style="margin-top:14px;font-size:13px;color:var(--text-muted);text-align:center;">Déjà partenaire ? <a href="/merchant.html" target="_blank" style="color:var(--orange);font-weight:600;">Accédez à votre espace</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ VUE COMPARER ============ -->
+  <div id="view-compare">
+    <a href="/" class="back-link">&larr; Retour à l'accueil</a>
+    <h1 class="product-title" style="margin-bottom:6px;">Comparer des produits</h1>
+    <p class="product-meta" id="compare-meta" style="margin-bottom:24px;"></p>
+    <div id="compare-content"></div>
+  </div>
+
+</div>
+
+<div class="compare-bar" id="compare-bar">
+  <span class="count" id="compare-count"></span>
+  <div class="actions">
+    <button class="btn-clear" id="compare-clear">Vider</button>
+    <button class="btn-go" id="compare-go">Comparer</button>
+  </div>
+</div>
+
+<footer>
+  <div class="container">Kasaprix — comparateur de prix multi-marchands en Côte d'Ivoire.</div>
+</footer>
+
+<script>
+const SUPABASE_URL = "https://bxljzktkxphdbalbmgcn.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_w3bjyu8CeKjESzbLI7eCkQ_xdGTo_qw";
+
+let allOffers = [];
+let priceHistory = [];
+let selectedZone = localStorage.getItem('kasaprix_zone') || null;
+
+function fmtPrice(n){
+  return Number(n).toLocaleString('fr-FR', {maximumFractionDigits: 0}) + ' FCFA';
+}
+function initials(name){
+  return (name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+function thumbHtml(imageUrl, label, sizeClass, elId){
+  const idAttr = elId ? `id="${elId}" ` : '';
+  if(imageUrl){
+    return `<img ${idAttr}src="${imageUrl}" alt="" class="${sizeClass}" style="object-fit:cover;border-radius:inherit;" onerror="this.outerHTML='<div ${idAttr}class=\\'${sizeClass}\\' style=\\'background:linear-gradient(135deg,var(--gold),var(--orange));display:flex;align-items:center;justify-content:center;font-family:Manrope,sans-serif;font-weight:800;color:#fff;\\'>${label}</div>'">`;
+  }
+  return `<div ${idAttr}class="${sizeClass}" style="background:linear-gradient(135deg,var(--gold),var(--orange));display:flex;align-items:center;justify-content:center;font-family:'Manrope',sans-serif;font-weight:800;color:#fff;">${label}</div>`;
+}
+function groupByProduct(offers){
+  const groups = {};
+  for(const o of offers){
+    if(!groups[o.product_id]) groups[o.product_id] = { id:o.product_id, name:o.product_name, brand:o.brand, image_url:o.image_url, category_slug:o.category_slug, category_name:o.category_name, offers:[] };
+    groups[o.product_id].offers.push(o);
+  }
+  return Object.values(groups);
+}
+function oldPriceFor(offerId, currentPrice){
+  const rows = priceHistory.filter(h => h.offer_id === offerId);
+  if(rows.length === 0) return null;
+  const last = rows.sort((a,b)=> new Date(b.changed_at) - new Date(a.changed_at))[0];
+  return Number(last.old_price_xof) > Number(currentPrice) ? Number(last.old_price_xof) : null;
+}
+
+const CATEGORY_EMOJIS = {
+  'high-tech': '📱',
+  'electromenager': '🏠',
+  'mode-beaute': '👗',
+  'supermarche': '🛒',
+};
+function emojiFor(slug){
+  return CATEGORY_EMOJIS[slug] || '🛍️';
+}
+function renderCategoryChips(){
+  const chipsEl = document.getElementById('category-chips');
+  const seen = new Map();
+  for(const o of allOffers){
+    if(o.category_slug && !seen.has(o.category_slug)){
+      seen.set(o.category_slug, o.category_name || o.category_slug);
+    }
+  }
+  if(seen.size === 0){
+    chipsEl.innerHTML = '';
+    return;
+  }
+  chipsEl.innerHTML = [...seen.entries()]
+    .sort((a,b) => a[1].localeCompare(b[1]))
+    .map(([slug, name]) => `<a class="chip" href="/categorie/${slug}">${emojiFor(slug)} ${name}</a>`)
+    .join('');
+}
+
+const NATIONWIDE = "Toute la Côte d'Ivoire";
+function isNationwide(city){ return city === NATIONWIDE; }
+
+function renderZoneChips(){
+  const zoneEl = document.getElementById('zone-chips');
+  const cities = [...new Set(allOffers.map(o => o.merchant_city).filter(c => c && !isNationwide(c)))].sort((a,b) => a.localeCompare(b));
+  if(cities.length === 0){ zoneEl.innerHTML = ''; return; }
+  const allChip = `<button class="chip${!selectedZone ? ' active' : ''}" data-zone="">🌍 Toutes les zones</button>`;
+  const cityChips = cities.map(city => `<button class="chip${selectedZone === city ? ' active' : ''}" data-zone="${city}">📍 ${city}</button>`).join('');
+  zoneEl.innerHTML = allChip + cityChips;
+  zoneEl.querySelectorAll('.chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const zone = btn.getAttribute('data-zone');
+      selectedZone = zone || null;
+      if(selectedZone) localStorage.setItem('kasaprix_zone', selectedZone);
+      else localStorage.removeItem('kasaprix_zone');
+      renderHome();
+    });
+  });
+}
+
+/* ---------- Comparateur de produits ---------- */
+const COMPARE_MAX = 4;
+function getCompareList(){
+  try{ return JSON.parse(localStorage.getItem('kasaprix_compare') || '[]'); }catch(e){ return []; }
+}
+function saveCompareList(list){
+  localStorage.setItem('kasaprix_compare', JSON.stringify(list));
+}
+function toggleCompare(productId){
+  let list = getCompareList();
+  if(list.includes(productId)){
+    list = list.filter(id => id !== productId);
+  }else{
+    if(list.length >= COMPARE_MAX){
+      alert(`Tu peux comparer jusqu'à ${COMPARE_MAX} produits à la fois. Retire-en un d'abord.`);
+      return;
+    }
+    list.push(productId);
+  }
+  saveCompareList(list);
+  document.querySelectorAll(`.compare-check[data-compare-id="${productId}"]`).forEach(btn => {
+    btn.classList.toggle('active', list.includes(productId));
+  });
+  renderCompareBar();
+}
+function compareCheckboxHtml(productId){
+  const active = getCompareList().includes(productId);
+  return `<button class="compare-check${active ? ' active' : ''}" data-compare-id="${productId}" title="Ajouter au comparateur">${active ? '✓' : '+'}</button>`;
+}
+function renderCompareBar(){
+  const bar = document.getElementById('compare-bar');
+  const list = getCompareList();
+  if(list.length === 0){ bar.classList.remove('visible'); return; }
+  bar.classList.add('visible');
+  document.getElementById('compare-count').textContent = `${list.length} produit${list.length>1?'s':''} sélectionné${list.length>1?'s':''}`;
+}
+function renderCompareView(){
+  const list = getCompareList();
+  const meta = document.getElementById('compare-meta');
+  const content = document.getElementById('compare-content');
+  const groups = groupByProduct(allOffers).filter(g => list.includes(g.id));
+
+  if(groups.length === 0){
+    meta.textContent = '';
+    content.innerHTML = `<div class="empty-state"><strong>Aucun produit à comparer</strong>Retourne à l'accueil et clique sur le "+" d'un produit pour l'ajouter ici.</div>`;
+    return;
+  }
+  meta.textContent = `${groups.length} produit${groups.length>1?'s':''} côte à côte`;
+
+  const rows = groups.map(g => {
+    const sorted = [...g.offers].sort((a,b)=>a.price_xof-b.price_xof);
+    const cheapest = sorted[0];
+    return { g, sorted, cheapest };
+  });
+
+  content.innerHTML = `
+  <div class="compare-table-wrap">
+    <table class="compare-table">
+      <tbody>
+        <tr><th>Produit</th>${rows.map(r => `
+          <td>
+            ${thumbHtml(r.g.image_url, initials(r.g.brand || r.g.name), 'compare-col-thumb')}
+            <div class="compare-col-name">${r.g.name}</div>
+            <button class="compare-remove" onclick="toggleCompare('${r.g.id}'); renderCompareView(); renderCompareBar();">Retirer</button>
+          </td>`).join('')}
+        </tr>
+        <tr><th>Marque</th>${rows.map(r => `<td>${r.g.brand || '—'}</td>`).join('')}</tr>
+        <tr><th>Prix le plus bas</th>${rows.map(r => `<td><span class="compare-price">${fmtPrice(r.cheapest.price_xof)}</span></td>`).join('')}</tr>
+        <tr><th>Chez</th>${rows.map(r => `<td>${r.cheapest.merchant_name}</td>`).join('')}</tr>
+        <tr><th>Marchands</th>${rows.map(r => `<td>${r.sorted.length} marchand${r.sorted.length>1?'s':''}</td>`).join('')}</tr>
+        <tr><th>Catégorie</th>${rows.map(r => `<td>${r.g.category_name || '—'}</td>`).join('')}</tr>
+        <tr><th></th>${rows.map(r => `<td><a class="compare-remove" style="text-decoration:none;color:var(--orange);font-weight:700;" href="/produit/${r.g.id}">Voir toutes les offres →</a></td>`).join('')}</tr>
+      </tbody>
+    </table>
+  </div>`;
+}
+
+document.getElementById('compare-clear').addEventListener('click', () => {
+  saveCompareList([]);
+  document.querySelectorAll('.compare-check.active').forEach(btn => btn.classList.remove('active'));
+  renderCompareBar();
+  if(location.pathname === '/comparer') renderCompareView();
+});
+document.getElementById('compare-go').addEventListener('click', () => {
+  history.pushState(null, '', '/comparer');
+  router();
+});
+
+/* ---------- Rendu accueil ---------- */
+function sponsorRibbon(offers){
+  return offers.some(o => o.is_sponsored) ? `<span class="sponsor-ribbon">⭐ Sponsoris\u00e9</span>` : '';
+}
+function competitionBadge(sorted, cheapest){
+  if(sorted.length > 1){
+    return `🔥 ${sorted.length} marchands · Moins cher chez ${cheapest.merchant_name}`;
+  }
+  return `✓ Disponible chez ${cheapest.merchant_name}`;
+}
+
+function renderHome(){
+  document.title = 'Kasaprix — Comparez, trouvez le meilleur prix';
+  renderCategoryChips();
+  renderZoneChips();
+  const grid = document.getElementById('deals-grid');
+  const title = document.getElementById('deals-title');
+
+  if(allOffers.length === 0){
+    title.textContent = 'Les meilleures affaires du jour';
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Pas encore d'offres en ligne</strong>
+      Les premiers marchands arrivent bientôt — reviens vite.
+    </div>`;
+    return;
+  }
+
+  let groups = groupByProduct(allOffers);
+
+  if(selectedZone){
+    groups = groups
+      .map(g => {
+        const localOffers = g.offers.filter(o => o.merchant_city === selectedZone || isNationwide(o.merchant_city));
+        if(localOffers.length === 0) return null;
+        return Object.assign({}, g, { localOffers });
+      })
+      .filter(Boolean);
+    title.textContent = `Disponible à ${selectedZone}`;
+  } else {
+    title.textContent = 'Les meilleures affaires du jour';
+  }
+
+  if(groups.length === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Rien de disponible à ${selectedZone} pour l'instant</strong>
+      Essaie "Toutes les zones", ou reviens bientôt.
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = groups.map(g => {
+    const sorted = [...g.offers].sort((a,b)=>a.price_xof-b.price_xof);
+    const cheapest = selectedZone ? [...g.localOffers].sort((a,b)=>a.price_xof-b.price_xof)[0] : sorted[0];
+    const old = oldPriceFor(cheapest.offer_id, cheapest.price_xof);
+    let zoneBadge;
+    if(selectedZone && cheapest.merchant_city === selectedZone){
+      zoneBadge = `<span class="badge-zone-local">📍 Disponible imm\u00e9diatement \u00e0 ${selectedZone}</span>`;
+    }else if(selectedZone){
+      zoneBadge = `<span class="badge-zone-delivery">🚚 Livraison dans toute la C\u00f4te d'Ivoire</span>`;
+    }else{
+      zoneBadge = `<span class="badge-cheapest">${competitionBadge(sorted, cheapest)}</span>`;
+    }
+    return `
+    <a class="deal-card" href="/produit/${g.id}">
+      ${sponsorRibbon(g.offers)}
+      ${compareCheckboxHtml(g.id)}
+      ${thumbHtml(g.image_url, initials(g.brand || g.name), 'deal-thumb')}
+      <div class="deal-brand">${g.brand || ''}</div>
+      <div class="deal-name">${g.name}</div>
+      <div class="price-row">
+        <span class="price-now">${fmtPrice(cheapest.price_xof)}</span>
+        ${old ? `<span class="price-old">${fmtPrice(old)}</span>` : ''}
+      </div>
+      ${zoneBadge}
+      <span class="compare-btn">Comparer les ${sorted.length} offre${sorted.length>1?'s':''}</span>
+    </a>`;
+  }).join('');
+}
+
+/* ---------- Rendu recherche (filtrage accueil) ---------- */
+function renderSearch(query){
+  const groups = groupByProduct(allOffers).filter(g =>
+    g.name.toLowerCase().includes(query) || (g.brand||'').toLowerCase().includes(query)
+  );
+  if(groups.length === 1){
+    history.replaceState(null, '', '/produit/' + groups[0].id);
+    renderProduct(groups[0].id);
+    document.getElementById('view-home').classList.remove('active');
+    document.getElementById('view-product').classList.add('active');
+    return;
+  }
+  const grid = document.getElementById('deals-grid');
+  const title = document.getElementById('deals-title');
+  title.textContent = groups.length ? `Résultats pour « ${query} »` : `Aucun résultat pour « ${query} »`;
+  if(groups.length === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Rien pour cette recherche</strong>
+      Essaie un autre nom de produit ou une marque.
+    </div>`;
+    return;
+  }
+  grid.innerHTML = groups.map(g => {
+    const sorted = [...g.offers].sort((a,b)=>a.price_xof-b.price_xof);
+    const cheapest = sorted[0];
+    return `
+    <a class="deal-card" href="/produit/${g.id}">
+      ${sponsorRibbon(g.offers)}
+      ${compareCheckboxHtml(g.id)}
+      ${thumbHtml(g.image_url, initials(g.brand || g.name), 'deal-thumb')}
+      <div class="deal-brand">${g.brand || ''}</div>
+      <div class="deal-name">${g.name}</div>
+      <div class="price-row"><span class="price-now">${fmtPrice(cheapest.price_xof)}</span></div>
+      <span class="badge-cheapest">${competitionBadge(sorted, cheapest)}</span>
+      <span class="compare-btn">Comparer les ${sorted.length} offre${sorted.length>1?'s':''}</span>
+    </a>`;
+  }).join('');
+}
+
+function trackClick(offerId){
+  try{
+    fetch(`${SUPABASE_URL}/rest/v1/rpc/log_offer_click`, {
+      method:'POST',
+      keepalive: true,
+      headers:{
+        apikey: SUPABASE_ANON_KEY,
+        Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({ p_offer_id: offerId })
+    });
+  }catch(e){}
+}
+window.trackClick = trackClick;
+
+function trackImpression(offerId){
+  try{
+    fetch(`${SUPABASE_URL}/rest/v1/rpc/log_offer_impression`, {
+      method:'POST',
+      keepalive: true,
+      headers:{
+        apikey: SUPABASE_ANON_KEY,
+        Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({ p_offer_id: offerId })
+    });
+  }catch(e){}
+}
+
+/* ---------- Rendu page produit / matrice ---------- */
+function zoneBadgeFor(o){
+  if(!o.merchant_city) return '';
+  if(isNationwide(o.merchant_city)){
+    return `<div class="badge-zone-delivery" style="margin-top:4px;">🚚 Livraison dans toute la C\u00f4te d'Ivoire</div>`;
+  }
+  if(selectedZone && o.merchant_city === selectedZone){
+    return `<div class="badge-zone-local" style="margin-top:4px;">📍 Disponible imm\u00e9diatement \u00e0 ${o.merchant_city}</div>`;
+  }
+  if(selectedZone){
+    return `<div class="badge-zone-delivery" style="margin-top:4px;">🚚 Livraison depuis ${o.merchant_city}</div>`;
+  }
+  return `<div class="badge-zone-delivery" style="margin-top:4px;">📍 ${o.merchant_city}</div>`;
+}
+
+function renderProduct(productId){
+  const offers = allOffers.filter(o => o.product_id === productId).sort((a,b)=>{
+    if(a.is_sponsored && !b.is_sponsored) return -1;
+    if(!a.is_sponsored && b.is_sponsored) return 1;
+    return a.price_xof-b.price_xof;
+  });
+  const cheapestPrice = Math.min(...offers.map(o => o.price_xof));
+  const list = document.getElementById('offers-list');
+
+  if(offers.length === 0){
+    document.getElementById('p-title').textContent = 'Produit introuvable';
+    document.getElementById('p-meta').textContent = '';
+    document.querySelector('[id="p-thumb"]').outerHTML = thumbHtml(null, '?', 'product-thumb', 'p-thumb');
+    list.innerHTML = `<div class="empty-state"><strong>Cette offre n'existe plus</strong>Retourne à l'accueil pour voir les produits disponibles.</div>`;
+    return;
+  }
+
+  const first = offers[0];
+  const cheapest = offers[0].price_xof;
+  const priciest = offers[offers.length-1].price_xof;
+  const ecart = priciest - cheapest;
+
+  document.getElementById('p-title').textContent = first.product_name;
+  document.title = `${first.product_name} — ${fmtPrice(cheapest)} | Kasaprix`;
+  document.querySelector('#p-thumb, [id="p-thumb"]').outerHTML = thumbHtml(first.image_url, initials(first.brand || first.product_name), 'product-thumb', 'p-thumb');
+  document.getElementById('p-meta').innerHTML = ecart > 0
+    ? `Trouvé chez <strong>${offers.length} marchands</strong> — écart de prix allant jusqu'à <strong>${fmtPrice(ecart)}</strong>`
+    : `Trouvé chez <strong>${offers.length} marchand${offers.length>1?'s':''}</strong>`;
+
+  offers.forEach(o => trackImpression(o.offer_id));
+
+  list.innerHTML = offers.map((o,i) => {
+    const isCheapest = o.price_xof === cheapestPrice;
+    const ctaHtml = o.merchant_whatsapp
+      ? `<a class="offer-cta secondary" target="_blank" rel="noopener" onclick="trackClick('${o.offer_id}')" href="${o.final_url}">Voir la fiche</a><a class="offer-cta whatsapp" target="_blank" rel="noopener" onclick="trackClick('${o.offer_id}')" href="https://wa.me/${o.merchant_whatsapp.replace(/[^\d]/g,'')}?text=${encodeURIComponent('Bonjour, je suis intéressé par : ' + o.product_name + '\n' + o.final_url)}">Commander via WhatsApp</a>`
+      : `<a class="offer-cta buy" target="_blank" rel="noopener" onclick="trackClick('${o.offer_id}')" href="${o.final_url}">Voir l'offre</a>`;
+    return `
+    <div class="offer-row ${isCheapest?'winner':''}" style="${o.is_sponsored ? 'border-color:var(--gold);' : ''}">
+      ${o.is_sponsored ? '<span class="winner-tag" style="background:var(--gold);">SPONSORISÉ</span>' : (isCheapest ? '<span class="winner-tag">MEILLEUR PRIX</span>' : '')}
+      <div class="offer-merchant">
+        <div class="merchant-avatar">${initials(o.merchant_name)}</div>
+        <div class="merchant-info">
+          <div class="name">${o.merchant_name}</div>
+          <div class="type">${o.partnership_type === 'direct' ? 'Marchand local' : 'Partenaire e-commerce'}</div>
+          ${zoneBadgeFor(o)}
+          ${merchantExtraHtml(o)}
+        </div>
+      </div>
+      <div class="offer-action">
+        <span class="offer-price">${fmtPrice(o.price_xof)}</span>
+        ${ctaHtml}
+      </div>
+    </div>`;
+  }).join('');
+  enhanceOffers(offers);
+
+  document.getElementById('alert-confirm').style.display = 'none';
+  document.getElementById('alert-error').style.display = 'none';
+  document.getElementById('alert-contact').value = '';
+  document.getElementById('alert-submit').onclick = async () => {
+    const btn = document.getElementById('alert-submit');
+    const errEl = document.getElementById('alert-error');
+    const okEl = document.getElementById('alert-confirm');
+    errEl.style.display = 'none'; okEl.style.display = 'none';
+    const raw = document.getElementById('alert-contact').value.replace(/[\s.\-()]/g, '').replace(/^(\+225|00225|225)/, '');
+    if(!/^(01|05|07|21|25|27)\d{8}$/.test(raw)){
+      errEl.textContent = 'Numéro invalide. Entre 10 chiffres, par ex. 07 00 00 00 00.';
+      errEl.style.display = 'block';
+      return;
+    }
+    btn.disabled = true;
+    const label = btn.textContent; btn.textContent = 'Envoi…';
+    try{
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/create_price_alert`, {
+        method:'POST',
+        headers:{
+          apikey: SUPABASE_ANON_KEY,
+          Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type':'application/json'
+        },
+        body: JSON.stringify({ p_product_id: productId, p_target_price: Math.floor(cheapest*0.9), p_contact: raw, p_channel: 'whatsapp', p_wants_deals: document.getElementById('alert-deals').checked })
+      });
+      if(!res.ok) throw new Error('http ' + res.status);
+      okEl.style.display = 'block';
+      document.getElementById('alert-contact').value = '';
+    }catch(e){
+      errEl.textContent = 'Oups, l\'inscription a échoué. Réessaie dans un instant.';
+      errEl.style.display = 'block';
+    }finally{
+      btn.disabled = false; btn.textContent = label;
+    }
+  };
+}
+
+/* ---------- Avis, livraison, historique des prix ---------- */
+let _miP = null;
+function _hdr(){ return { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY, 'Content-Type': 'application/json' }; }
+function _esc(t){ return String(t == null ? '' : t).replace(/[&<>\x22\x27]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\x22':'&quot;','\x27':'&#39;'}[c])); }
+function _stars(n){ const f = Math.max(0, Math.min(5, Math.round(n))); return '★'.repeat(f) + '☆'.repeat(5 - f); }
+async function _rpc(name, body){
+  const r = await fetch(SUPABASE_URL + '/rest/v1/rpc/' + name, { method:'POST', headers:_hdr(), body: JSON.stringify(body || {}) });
+  if(!r.ok) throw new Error(name + ' ' + r.status);
+  return r.json();
+}
+function loadMerchantInfo(){
+  if(!_miP) _miP = (async () => {
+    const map = {};
+    try{ (await _rpc('public_merchant_info')).forEach(x => { map[x.name] = x; }); }catch(e){}
+    return map;
+  })();
+  return _miP;
+}
+function merchantExtraHtml(o){ return `<div class='m-extra' data-m='${_esc(o.merchant_name)}'></div>`; }
+async function enhanceOffers(offers){
+  const info = await loadMerchantInfo();
+  document.querySelectorAll('#offers-list .m-extra').forEach(el => {
+    const m = info[el.getAttribute('data-m')];
+    if(!m) return;
+    const rating = Number(m.review_count) > 0
+      ? `<span class='m-rating'>${_stars(m.avg_rating)} <strong>${Number(m.avg_rating).toFixed(1)}</strong> (${m.review_count} avis)</span>`
+      : `<span class='m-rating m-none'>Pas encore d'avis</span>`;
+    const deliv = m.delivery_info ? `<span class='m-deliv'>🚚 ${_esc(m.delivery_info)}</span>` : '';
+    el.innerHTML = rating + deliv + `<button type='button' class='m-review-btn'>Voir / donner un avis</button>`;
+    el.querySelector('.m-review-btn').onclick = () => openReviewModal(m);
+  });
+  loadPriceHistory(offers);
+}
+async function openReviewModal(m){
+  let modal = document.getElementById('rev-modal');
+  if(!modal){
+    modal = document.createElement('div'); modal.id = 'rev-modal'; document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; });
+  }
+  modal.innerHTML = `<div class='rev-card'><h3>Avis sur ${_esc(m.name)}</h3><div class='rev-list'>Chargement…</div>
+    <div class='rev-form'><strong>Ton avis</strong>
+      <select class='rev-rating'><option value='5'>★★★★★ Excellent</option><option value='4'>★★★★☆ Bien</option><option value='3'>★★★☆☆ Moyen</option><option value='2'>★★☆☆☆ Décevant</option><option value='1'>★☆☆☆☆ Mauvais</option></select>
+      <textarea class='rev-comment' maxlength='500' rows='3' placeholder='Livraison, qualité, accueil… (facultatif)'></textarea>
+      <input class='rev-author' maxlength='60' placeholder='Ton prénom (facultatif)'>
+      <button type='button' class='rev-send'>Envoyer mon avis</button><p class='rev-msg'></p></div>
+    <button type='button' class='rev-close'>Fermer</button></div>`;
+  modal.style.display = 'flex';
+  modal.querySelector('.rev-close').onclick = () => { modal.style.display = 'none'; };
+  const msg = modal.querySelector('.rev-msg');
+  modal.querySelector('.rev-send').onclick = async (ev) => {
+    const btn = ev.currentTarget; btn.disabled = true; msg.textContent = '';
+    try{
+      await _rpc('submit_merchant_review', { p_merchant_id: m.merchant_id, p_rating: Number(modal.querySelector('.rev-rating').value), p_comment: modal.querySelector('.rev-comment').value, p_author: modal.querySelector('.rev-author').value });
+      msg.style.color = '#0a7a3d'; msg.textContent = 'Merci ! Ton avis sera publié après vérification.';
+      modal.querySelector('.rev-comment').value = '';
+    }catch(e){ msg.style.color = '#D5443B'; msg.textContent = `Oups, l'envoi a échoué. Réessaie dans un instant.`; }
+    btn.disabled = false;
+  };
+  try{
+    const rows = await _rpc('public_merchant_reviews', { p_merchant_id: m.merchant_id, p_limit: 5 });
+    modal.querySelector('.rev-list').innerHTML = rows.length
+      ? rows.map(r => `<div class='rev-item'><span style='color:#C98A00'>${_stars(r.rating)}</span> <small>${_esc(r.author_name || 'Client')} · ${new Date(r.created_at).toLocaleDateString('fr-FR')}</small>${r.comment ? '<p>' + _esc(r.comment) + '</p>' : ''}</div>`).join('')
+      : `<p>Aucun avis publié pour l'instant. Sois le premier !</p>`;
+  }catch(e){ modal.querySelector('.rev-list').innerHTML = ''; }
+}
+async function loadPriceHistory(offers){
+  const old = document.getElementById('price-history'); if(old) old.remove();
+  try{
+    const ids = offers.map(o => o.offer_id);
+    const r = await fetch(SUPABASE_URL + '/rest/v1/price_history?select=offer_id,old_price_xof,new_price_xof,changed_at&order=changed_at.asc&offer_id=in.(' + ids.join(',') + ')', { headers: _hdr() });
+    if(!r.ok) return;
+    const rows = await r.json();
+    if(!rows.length) return;
+    const best = offers.reduce((a, b) => a.price_xof <= b.price_xof ? a : b);
+    const oid = rows.some(x => x.offer_id === best.offer_id) ? best.offer_id : rows[0].offer_id;
+    const mine = rows.filter(x => x.offer_id === oid);
+    const cur = offers.find(o => o.offer_id === oid);
+    const pts = [{ t: new Date(mine[0].changed_at).getTime() - 86400000, p: Number(mine[0].old_price_xof) }];
+    mine.forEach(x => pts.push({ t: new Date(x.changed_at).getTime(), p: Number(x.new_price_xof) }));
+    pts.push({ t: Date.now(), p: cur.price_xof });
+    const W = 600, H = 150, pad = 8;
+    const t0 = pts[0].t, t1 = pts[pts.length - 1].t;
+    const prices = pts.map(x => x.p), lo = Math.min(...prices), hi = Math.max(...prices);
+    const X = t => pad + (W - 2 * pad) * (t - t0) / Math.max(1, t1 - t0);
+    const Y = p => hi === lo ? H / 2 : H - pad - (H - 2 * pad) * (p - lo) / (hi - lo);
+    let path = 'M' + X(pts[0].t).toFixed(1) + ' ' + Y(pts[0].p).toFixed(1);
+    for(let i = 1; i < pts.length; i++){ path += ' H' + X(pts[i].t).toFixed(1) + ' V' + Y(pts[i].p).toFixed(1); }
+    const delta = pts[pts.length - 1].p - pts[0].p;
+    const trend = delta < 0 ? `📉 En baisse de ${fmtPrice(-delta)} depuis le début du suivi` : delta > 0 ? `📈 En hausse de ${fmtPrice(delta)} depuis le début du suivi` : 'Prix stable';
+    const box = document.createElement('div'); box.id = 'price-history'; box.className = 'ph-box';
+    box.innerHTML = `<h3>Historique du prix · ${_esc(cur.merchant_name)}</h3><p>${trend}</p>
+      <svg viewBox='0 0 ${W} ${H}' preserveAspectRatio='none' role='img' aria-label='Évolution du prix'><path d='${path}' fill='none' stroke='#0a7a3d' stroke-width='3' vector-effect='non-scaling-stroke'/></svg>
+      <p>Plus bas : <strong>${fmtPrice(lo)}</strong> · Plus haut : <strong>${fmtPrice(hi)}</strong></p>`;
+    document.getElementById('offers-list').insertAdjacentElement('afterend', box);
+  }catch(e){}
+}
+
+/* ---------- Classement des prix (temps réel) ---------- */
+let _rankTimer = null;
+const _rankState = { q: '', merchant: '', drops: false, dir: 'asc', updated: Date.now() };
+function _lastChanges(){
+  const m = {};
+  (priceHistory || []).forEach(h => { const c = m[h.offer_id]; if(!c || new Date(h.changed_at) > new Date(c.changed_at)) m[h.offer_id] = h; });
+  return m;
+}
+async function refreshRankData(){
+  try{
+    const hd = { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY };
+    const [a, b] = await Promise.all([
+      fetch(SUPABASE_URL + '/rest/v1/public_price_matrix?select=*', { headers: hd }),
+      fetch(SUPABASE_URL + '/rest/v1/price_history?select=*', { headers: hd })
+    ]);
+    if(a.ok) allOffers = await a.json();
+    if(b.ok) priceHistory = await b.json();
+    _rankState.updated = Date.now();
+  }catch(e){}
+}
+function renderRanking(){
+  const box = document.getElementById('rank-list');
+  if(!box) return;
+  const last = _lastChanges();
+  let rows = allOffers.slice();
+  const q = _rankState.q.trim().toLowerCase();
+  if(q) rows = rows.filter(o => (o.product_name + ' ' + (o.brand || '') + ' ' + o.merchant_name).toLowerCase().includes(q));
+  if(_rankState.merchant) rows = rows.filter(o => o.merchant_name === _rankState.merchant);
+  if(_rankState.drops) rows = rows.filter(o => { const c = last[o.offer_id]; return c && Number(c.new_price_xof) < Number(c.old_price_xof); });
+  rows.sort((a, b) => _rankState.dir === 'asc' ? a.price_xof - b.price_xof : b.price_xof - a.price_xof);
+  const nDown = allOffers.filter(o => { const c = last[o.offer_id]; return c && Number(c.new_price_xof) < Number(c.old_price_xof); }).length;
+  const nUp = allOffers.filter(o => { const c = last[o.offer_id]; return c && Number(c.new_price_xof) > Number(c.old_price_xof); }).length;
+  document.getElementById('rank-status').textContent = rows.length + ' offre' + (rows.length > 1 ? 's' : '') + ' · ▼ ' + nDown + ' en baisse · ▲ ' + nUp + ' en hausse · mis à jour à ' + new Date(_rankState.updated).toLocaleTimeString('fr-FR') + ' (actualisation automatique)';
+  if(!rows.length){ box.innerHTML = `<div class='empty-state'><strong>Aucune offre</strong>Essaie un autre filtre.</div>`; return; }
+  box.innerHTML = rows.map((o, i) => {
+    const c = last[o.offer_id];
+    let v = `<span class='rk-flat' title='Prix stable'>– stable</span>`;
+    if(c){
+      const diff = Number(c.new_price_xof) - Number(c.old_price_xof);
+      const pct = Math.round(Math.abs(diff) / Math.max(1, Number(c.old_price_xof)) * 100);
+      const dt = new Date(c.changed_at).toLocaleDateString('fr-FR');
+      if(diff < 0) v = `<span class='rk-down' title='Baisse du ${dt}'>▼ ${fmtPrice(-diff)} (-${pct}%)</span>`;
+      else if(diff > 0) v = `<span class='rk-up' title='Hausse du ${dt}'>▲ +${fmtPrice(diff)} (+${pct}%)</span>`;
+    }
+    return `<a class='rk-row' href='/produit/${_esc(o.product_id)}'><span class='rk-n'>${i + 1}</span><span class='rk-name'>${_esc(o.product_name)}</span><span class='rk-price'>${fmtPrice(o.price_xof)}</span><span class='rk-meta'>${_esc(o.merchant_name)}</span><span class='rk-var'>${v}</span></a>`;
+  }).join('');
+}
+function stopRanking(){ if(_rankTimer){ clearInterval(_rankTimer); _rankTimer = null; } }
+function startRanking(){
+  const sel = document.getElementById('rank-merchant');
+  if(sel && sel.options.length <= 1){
+    [...new Set(allOffers.map(o => o.merchant_name))].sort((a, b) => a.localeCompare(b)).forEach(n => { const op = document.createElement('option'); op.value = n; op.textContent = n; sel.appendChild(op); });
+  }
+  renderRanking();
+  stopRanking();
+  refreshRankData().then(renderRanking);
+  _rankTimer = setInterval(() => { if(!document.hidden) refreshRankData().then(renderRanking); }, 60000);
+}
+document.getElementById('rank-q').addEventListener('input', e => { _rankState.q = e.target.value; renderRanking(); });
+document.getElementById('rank-merchant').addEventListener('change', e => { _rankState.merchant = e.target.value; renderRanking(); });
+document.getElementById('rank-dir').addEventListener('change', e => { _rankState.dir = e.target.value; renderRanking(); });
+document.getElementById('rank-drops').addEventListener('change', e => { _rankState.drops = e.target.checked; renderRanking(); });
+const _router0 = router;
+router = function(){
+  const rv = document.getElementById('view-rank');
+  if(location.pathname === '/classement'){
+    trackVisit();
+    ['view-home', 'view-product', 'view-pro', 'view-compare'].forEach(id => { const e = document.getElementById(id); if(e) e.classList.remove('active'); });
+    rv.style.display = 'block';
+    document.title = 'Classement des prix — Kasaprix';
+    startRanking();
+    window.scrollTo(0, 0);
+    return;
+  }
+  rv.style.display = 'none';
+  stopRanking();
+  _router0();
+};
+
+/* ---------- Partage réseaux sociaux ---------- */
+function _shareData(){
+  const m = location.pathname.match(/^\/produit\/(.+)$/);
+  if(!m) return null;
+  const id = decodeURIComponent(m[1]);
+  const offers = allOffers.filter(o => o.product_id === id).sort((a, b) => a.price_xof - b.price_xof);
+  if(!offers.length) return null;
+  const c = offers[0], hi = offers[offers.length - 1];
+  const url = location.origin + '/produit/' + encodeURIComponent(id);
+  let text = '🔥 ' + c.product_name.trim() + ' : ' + fmtPrice(c.price_xof) + ' chez ' + c.merchant_name;
+  if(offers.length > 1){
+    text += ' (' + offers.length + ' marchands comparés';
+    const e = hi.price_xof - c.price_xof;
+    if(e > 0) text += `, jusqu'à ` + fmtPrice(e) + ` d'écart`;
+    text += ')';
+  }
+  text += ' sur Kasaprix';
+  return { title: c.product_name + ' — Kasaprix', text: text, url: url };
+}
+async function shareProduct(){
+  const d = _shareData();
+  if(!d) return;
+  if(navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)){
+    try{ await navigator.share({ title: d.title, text: d.text, url: d.url }); return; }
+    catch(e){ if(e && e.name === 'AbortError') return; }
+  }
+  openShareModal(d);
+}
+function openShareModal(d){
+  let modal = document.getElementById('share-modal');
+  if(!modal){
+    modal = document.createElement('div'); modal.id = 'share-modal'; document.body.appendChild(modal);
+    modal.addEventListener('click', e => { if(e.target === modal) modal.style.display = 'none'; });
+  }
+  const full = d.text + ' 👉 ' + d.url;
+  const u = encodeURIComponent(d.url), t = encodeURIComponent(d.text), f = encodeURIComponent(full);
+  modal.innerHTML = `<div class='sh-card'><h3>Partager cette comparaison</h3><div class='sh-text'>${_esc(full)}</div>
+    <div class='sh-grid'>
+      <a class='sh-wa' target='_blank' rel='noopener' href='https://wa.me/?text=${f}'>WhatsApp</a>
+      <a class='sh-fb' target='_blank' rel='noopener' href='https://www.facebook.com/sharer/sharer.php?u=${u}&quote=${t}'>Facebook</a>
+      <a class='sh-x' target='_blank' rel='noopener' href='https://twitter.com/intent/tweet?text=${t}&url=${u}'>X</a>
+      <a class='sh-tg' target='_blank' rel='noopener' href='https://t.me/share/url?url=${u}&text=${t}'>Telegram</a>
+      <button type='button' class='sh-cp'>🔗 Copier le message</button>
+    </div>
+    <button type='button' class='sh-close'>Fermer</button></div>`;
+  modal.style.display = 'flex';
+  modal.querySelector('.sh-close').onclick = () => { modal.style.display = 'none'; };
+  modal.querySelector('.sh-cp').onclick = async (ev) => {
+    const b = ev.currentTarget;
+    try{ await navigator.clipboard.writeText(full); b.textContent = 'Copié ✓'; }
+    catch(e){ prompt('Copie ce message :', full); }
+  };
+}
+
+/* ---------- Routeur (hash) ---------- */
+function renderCategory(slug){
+  const groups = groupByProduct(allOffers).filter(g => g.category_slug === slug);
+  const grid = document.getElementById('deals-grid');
+  const title = document.getElementById('deals-title');
+  const catName = groups[0]?.category_name || slug;
+  title.textContent = catName;
+  if(groups.length === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Rien dans cette catégorie pour l'instant</strong>
+      De nouveaux produits arrivent en continu, reviens vite.
+    </div>`;
+    return;
+  }
+  grid.innerHTML = groups.map(g => {
+    const sorted = [...g.offers].sort((a,b)=>a.price_xof-b.price_xof);
+    const cheapest = sorted[0];
+    return `
+    <a class="deal-card" href="/produit/${g.id}">
+      ${sponsorRibbon(g.offers)}
+      ${compareCheckboxHtml(g.id)}
+      ${thumbHtml(g.image_url, initials(g.brand || g.name), 'deal-thumb')}
+      <div class="deal-brand">${g.brand || ''}</div>
+      <div class="deal-name">${g.name}</div>
+      <div class="price-row"><span class="price-now">${fmtPrice(cheapest.price_xof)}</span></div>
+      <span class="badge-cheapest">${competitionBadge(sorted, cheapest)}</span>
+      <span class="compare-btn">Comparer les ${sorted.length} offre${sorted.length>1?'s':''}</span>
+    </a>`;
+  }).join('');
+}
+
+function renderBonsPlans(){
+  document.title = 'Bons plans du jour — Kasaprix';
+  const grid = document.getElementById('deals-grid');
+  const title = document.getElementById('deals-title');
+  title.textContent = 'Bons plans du jour';
+  renderCategoryChips();
+
+  const groups = groupByProduct(allOffers);
+  const deals = groups.map(g => {
+    const sorted = [...g.offers].sort((a,b)=>a.price_xof-b.price_xof);
+    const cheapest = sorted[0];
+    const old = oldPriceFor(cheapest.offer_id, cheapest.price_xof);
+    const isManualDeal = g.offers.some(o => o.is_deal);
+    if(!old && !isManualDeal) return null;
+    const pct = old ? Math.round((1 - cheapest.price_xof/old)*100) : null;
+    return { g, sorted, cheapest, old, pct, isManualDeal };
+  }).filter(Boolean).sort((a,b) => (b.pct||0) - (a.pct||0));
+
+  if(deals.length === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Pas de bon plan pour l'instant</strong>
+      Les bons plans apparaissent ici dès qu'un prix baisse — reviens vite.
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = deals.map(({g, sorted, cheapest, old, pct, isManualDeal}) => `
+    <a class="deal-card" href="/produit/${g.id}">
+      ${sponsorRibbon(g.offers)}
+      ${compareCheckboxHtml(g.id)}
+      ${thumbHtml(g.image_url, initials(g.brand || g.name), 'deal-thumb')}
+      <div class="deal-brand">${g.brand || ''}</div>
+      <div class="deal-name">${g.name}</div>
+      <div class="price-row">
+        <span class="price-now">${fmtPrice(cheapest.price_xof)}</span>
+        ${old ? `<span class="price-old">${fmtPrice(old)}</span>` : ''}
+      </div>
+      <span class="badge-cheapest">${pct ? `↓ -${pct}% chez ${cheapest.merchant_name}` : `⭐ Coup de cœur chez ${cheapest.merchant_name}`}</span>
+      <span class="compare-btn">Comparer les ${sorted.length} offre${sorted.length>1?'s':''}</span>
+    </a>`).join('');
+}
+
+function renderMerchants(){
+  document.title = 'Marchands partenaires — Kasaprix';
+  const grid = document.getElementById('deals-grid');
+  const title = document.getElementById('deals-title');
+  title.textContent = 'Marchands partenaires';
+  document.getElementById('category-chips').innerHTML = '';
+
+  const merchants = new Map();
+  for(const o of allOffers){
+    if(!merchants.has(o.merchant_id)){
+      merchants.set(o.merchant_id, { id:o.merchant_id, name:o.merchant_name, type:o.partnership_type, count:0 });
+    }
+    merchants.get(o.merchant_id).count++;
+  }
+
+  if(merchants.size === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Pas encore de marchand en ligne</strong>
+      Les premiers partenaires arrivent bientôt.
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = [...merchants.values()].sort((a,b) => b.count - a.count).map(m => `
+    <a class="deal-card" href="/marchand/${m.id}">
+      <div class="deal-thumb" style="font-size:18px;">${initials(m.name)}</div>
+      <div class="deal-name">${m.name}</div>
+      <span class="badge-cheapest">${m.type === 'direct' ? 'Marchand local' : 'Partenaire e-commerce'}</span>
+      <span class="compare-btn">${m.count} offre${m.count>1?'s':''} en ligne</span>
+    </a>`).join('');
+}
+
+function renderMerchantProducts(merchantId){
+  const offers = allOffers.filter(o => o.merchant_id === merchantId);
+  const grid = document.getElementById('deals-grid');
+  const title = document.getElementById('deals-title');
+  const merchantName = offers[0]?.merchant_name || 'Marchand';
+  document.title = `${merchantName} — Kasaprix`;
+  title.textContent = merchantName;
+  document.getElementById('category-chips').innerHTML = '';
+
+  if(offers.length === 0){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+      <strong>Marchand introuvable</strong>
+      Retourne à la liste des marchands.
+    </div>`;
+    return;
+  }
+
+  const groups = groupByProduct(offers);
+  grid.innerHTML = groups.map(g => {
+    const cheapest = g.offers[0];
+    const allOffersForProduct = allOffers.filter(o => o.product_id === g.id);
+    const totalMerchants = allOffersForProduct.length;
+    return `
+    <a class="deal-card" href="/produit/${g.id}">
+      ${sponsorRibbon(allOffersForProduct)}
+      ${compareCheckboxHtml(g.id)}
+      ${thumbHtml(g.image_url, initials(g.brand || g.name), 'deal-thumb')}
+      <div class="deal-brand">${g.brand || ''}</div>
+      <div class="deal-name">${g.name}</div>
+      <div class="price-row"><span class="price-now">${fmtPrice(cheapest.price_xof)}</span></div>
+      <span class="compare-btn">${totalMerchants > 1 ? `Comparer les ${totalMerchants} offres` : 'Voir le produit'}</span>
+    </a>`;
+  }).join('');
+}
+
+function router(){
+  trackVisit();
+  const path = location.pathname;
+  const homeView = document.getElementById('view-home');
+  const productView = document.getElementById('view-product');
+  const proView = document.getElementById('view-pro');
+  const compareView = document.getElementById('view-compare');
+  const productMatch = path.match(/^\/produit\/(.+)$/);
+  const categoryMatch = path.match(/^\/categorie\/(.+)$/);
+  const merchantMatch = path.match(/^\/marchand\/(.+)$/);
+
+  homeView.classList.remove('active');
+  productView.classList.remove('active');
+  proView.classList.remove('active');
+  compareView.classList.remove('active');
+
+  if(productMatch){
+    productView.classList.add('active');
+    renderProduct(decodeURIComponent(productMatch[1]));
+  }else if(path === '/espace-pro'){
+    proView.classList.add('active');
+    document.title = 'Espace Pro — Kasaprix';
+  }else if(path === '/comparer'){
+    compareView.classList.add('active');
+    document.title = 'Comparer des produits — Kasaprix';
+    renderCompareView();
+  }else{
+    homeView.classList.add('active');
+    if(categoryMatch){
+      renderCategory(decodeURIComponent(categoryMatch[1]));
+    }else if(merchantMatch){
+      renderMerchantProducts(decodeURIComponent(merchantMatch[1]));
+    }else if(path === '/bons-plans'){
+      renderBonsPlans();
+    }else if(path === '/marchands'){
+      renderMerchants();
+    }else{
+      const params = new URLSearchParams(location.search);
+      const q = params.get('q') || '';
+      document.getElementById('search-input').value = q;
+      if(q) renderSearch(q.toLowerCase()); else renderHome();
+    }
+  }
+  window.scrollTo(0,0);
+}
+
+document.getElementById('pro-submit').addEventListener('click', async () => {
+  const errorEl = document.getElementById('pro-error');
+  const confirmEl = document.getElementById('pro-confirm');
+  errorEl.style.display = 'none';
+  confirmEl.style.display = 'none';
+
+  const name = document.getElementById('pro-name').value.trim();
+  const whatsapp = document.getElementById('pro-whatsapp').value.trim();
+  if(!name || !whatsapp){
+    errorEl.textContent = 'Le nom et le numéro WhatsApp sont requis.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/rpc/submit_partner_application`, {
+      method:'POST',
+      headers:{
+        apikey: SUPABASE_ANON_KEY,
+        Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        p_name: name,
+        p_contact_whatsapp: whatsapp,
+        p_contact_phone: document.getElementById('pro-phone').value.trim() || null,
+        p_website_url: document.getElementById('pro-website').value.trim() || null
+      })
+    });
+    confirmEl.style.display = 'block';
+    ['pro-name','pro-whatsapp','pro-phone','pro-website'].forEach(id => document.getElementById(id).value = '');
+  }catch(e){
+    errorEl.textContent = "Erreur lors de l'envoi, réessaie dans un instant.";
+    errorEl.style.display = 'block';
+  }
+});
+
+/* Navigation interne sans rechargement complet : intercepte les clics sur les liens internes */
+document.addEventListener('click', (e) => {
+  const compareBtn = e.target.closest('.compare-check');
+  if(compareBtn){
+    e.preventDefault();
+    e.stopPropagation();
+    toggleCompare(compareBtn.getAttribute('data-compare-id'));
+    return;
+  }
+  const link = e.target.closest('a[href^="/"]');
+  if(!link || link.target === '_blank') return;
+  e.preventDefault();
+  const url = link.getAttribute('href');
+  if(url !== location.pathname + location.search){
+    history.pushState(null, '', url);
+  }
+  router();
+});
+window.addEventListener('popstate', router);
+
+document.getElementById('search-input').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter'){
+    const q = e.target.value.trim();
+    const url = q ? `/?q=${encodeURIComponent(q)}` : '/';
+    if(url !== location.pathname + location.search) history.pushState(null, '', url);
+    router();
+  }
+});
+document.getElementById('search-input').addEventListener('input', () => {
+  if(location.pathname !== '/') return;
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  if(q) renderSearch(q); else renderHome();
+});
+
+function trackVisit(){
+  try{
+    const deviceType = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+    fetch(`${SUPABASE_URL}/rest/v1/rpc/log_page_view`, {
+      method:'POST',
+      keepalive: true,
+      headers:{
+        apikey: SUPABASE_ANON_KEY,
+        Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({ p_path: location.pathname, p_device_type: deviceType })
+    });
+  }catch(e){}
+}
+
+async function loadData(){
+  try{
+    const [offersRes, historyRes] = await Promise.all([
+      fetch(`${SUPABASE_URL}/rest/v1/public_price_matrix?select=*`, {
+        headers:{ apikey: SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}` }
+      }),
+      fetch(`${SUPABASE_URL}/rest/v1/price_history?select=*`, {
+        headers:{ apikey: SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}` }
+      })
+    ]);
+    allOffers = offersRes.ok ? await offersRes.json() : [];
+    priceHistory = historyRes.ok ? await historyRes.json() : [];
+  }catch(e){
+    allOffers = [];
+  }
+  renderCompareBar();
+  router();
+}
+
+loadData();
+</script>
+</body>
+</html>

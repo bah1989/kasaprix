@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasaprix — Admin Marchands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --bg-soft:#F7F6F2; --text:#15171C; --text-muted:#6E7280;
+    --border:#E7E5DF; --orange:#FF6B1A; --green:#1D9A6C; --red:#D5443B;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg-soft);color:var(--text);font-family:'Inter',sans-serif;}
+  .container{max-width:920px;margin:0 auto;padding:32px 20px 80px;}
+  h1{font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;margin:0 0 4px;}
+  .sub{color:var(--text-muted);font-size:14px;margin:0 0 28px;}
+  .card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:20px;}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--text-muted);margin:0 0 5px;}
+  input,select{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;font-size:14px;font-family:inherit;margin-bottom:14px;}
+  input:focus,select:focus{outline:none;border-color:var(--orange);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:640px){ .row2{grid-template-columns:1fr;} }
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:9px;font-weight:700;font-size:14px;padding:11px 18px;}
+  .btn-primary{background:var(--orange);color:#fff;}
+  .btn-secondary{background:var(--bg-soft);color:var(--text);border:1px solid var(--border);}
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;color:var(--text-muted);font-weight:600;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--border);}
+  td{padding:10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  .pill{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11.5px;font-weight:700;}
+  .pill.affiliate{background:#FFF1E5;color:var(--orange);}
+  .pill.direct{background:#E7F6EF;color:var(--green);}
+  .pill.inactive{background:#FBEAEA;color:var(--red);}
+  .pill.sponsored{background:#FFF8E1;color:#B8860B;}
+  .link-edit{color:var(--orange);font-weight:700;font-size:13px;cursor:pointer;background:none;padding:0;}
+  #login-screen{max-width:360px;margin:80px auto;}
+  .msg{font-size:13px;margin-top:8px;}
+  .msg.error{color:var(--red);}
+  .msg.ok{color:var(--green);}
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="container">
+  <div class="card">
+    <h1>Accès admin</h1>
+    <p class="sub">Kasaprix — gestion des marchands</p>
+    <label>Mot de passe</label>
+    <input id="secret-input" type="password" placeholder="••••••••">
+    <button class="btn-primary" style="width:100%" id="login-btn">Se connecter</button>
+    <p class="msg error" id="login-error"></p>
+  </div>
+</div>
+
+<div id="admin-screen" class="container" style="display:none">
+  <h1>Marchands</h1>
+  <p class="sub">Configure le mode d'affiliation et le flux catalogue de chaque marchand.</p>
+
+  <div class="card">
+    <h3 id="form-title" style="margin:0 0 16px;font-family:'Manrope',sans-serif;">Nouveau marchand</h3>
+    <input type="hidden" id="m-id">
+    <div class="row2">
+      <div><label>Nom du marchand</label><input id="m-name" placeholder="Ex: Jumia CI"></div>
+      <div><label>Type de partenariat</label>
+        <select id="m-type">
+          <option value="direct">Direct (marchand local)</option>
+          <option value="affiliate">Affiliate (plateforme e-commerce)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div><label>Tag d'affiliation (si affiliate)</label><input id="m-tag" placeholder="Ex: aff_tag_bah_001"></div>
+      <div><label>Site web</label><input id="m-website" placeholder="https://..."></div>
+    </div>
+    <div class="row2">
+      <div><label>Feed URL (flux catalogue)</label><input id="m-feed-url" placeholder="https://..."></div>
+      <div><label>Format du flux</label>
+        <select id="m-feed-format">
+          <option value="">—</option>
+          <option value="json">JSON</option>
+          <option value="xml">XML</option>
+          <option value="csv">CSV</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div><label>WhatsApp (si marchand direct)</label><input id="m-whatsapp" placeholder="+225 07 00 00 00 00"></div>
+      <div><label>Téléphone</label><input id="m-phone" placeholder="+225 ..."></div>
+    </div>
+    <div class="row2">
+      <div><label>Ville / Zone</label><input id="m-city" placeholder="Ex: Adzopé, Abidjan..."></div>
+      <div></div>
+    </div>
+    <div class="row2">
+      <div><label>Statut</label>
+        <select id="m-active">
+          <option value="true">Actif</option>
+          <option value="false">Inactif</option>
+        </select>
+      </div>
+      <div></div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-primary" id="save-btn">Enregistrer</button>
+      <button class="btn-secondary" id="cancel-btn">Annuler / Nouveau</button>
+    </div>
+    <p class="msg" id="save-msg"></p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Visites du site</h3>
+    <p class="sub" style="margin:0 0 16px;">Nombre de fois où une page de Kasaprix a été ouverte.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">
+      <div><div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;" id="stat-total">—</div><div class="sub" style="margin:0;">Total</div></div>
+      <div><div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;" id="stat-7j">—</div><div class="sub" style="margin:0;">7 derniers jours</div></div>
+      <div><div style="font-family:'Manrope',sans-serif;font-weight:800;font-size:24px;" id="stat-today">—</div><div class="sub" style="margin:0;">Aujourd'hui</div></div>
+    </div>
+    <p class="sub" style="margin:14px 0 0;text-align:center;" id="stat-device"></p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 16px;font-family:'Manrope',sans-serif;">Marchands existants</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Nom</th><th>Ville</th><th>Type</th><th>Flux</th><th>Statut</th><th>Code marchand</th><th></th></tr></thead>
+      <tbody id="merchants-tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Ajouter une offre manuellement</h3>
+    <p class="sub" style="margin:0 0 16px;">Pour les marchands sans flux automatisable (ex: liens JForce Jumia) — un produit à la fois.</p>
+    <label>Marchand</label>
+    <select id="o-merchant"></select>
+    <div class="row2">
+      <div><label>Nom du produit</label><input id="o-name" placeholder="Ex: Samsung Galaxy A15"></div>
+      <div><label>Marque</label><input id="o-brand" placeholder="Ex: Samsung"></div>
+    </div>
+    <div class="row2">
+      <div><label>Prix (FCFA)</label><input id="o-price" type="number" placeholder="Ex: 95000"></div>
+      <div><label>En stock ?</label>
+        <select id="o-stock"><option value="true">Oui</option><option value="false">Non</option></select>
+      </div>
+    </div>
+    <label>Lien du produit (ex: lien JForce)</label>
+    <input id="o-link" placeholder="https://jforce.jumia.ci/s/...">
+    <label>Photo du produit (depuis le téléphone ou l'ordinateur)</label>
+    <input id="o-image-file" type="file" accept="image/*">
+    <input id="o-image" type="hidden">
+    <p class="msg" id="o-image-status" style="margin-top:-10px;"></p>
+    <label>Catégorie</label>
+    <select id="o-category">
+      <option value="">—</option>
+      <option value="High-Tech">📱 High-Tech</option>
+      <option value="Électroménager">🏠 Électroménager</option>
+      <option value="Mode & Beauté">👗 Mode & Beauté</option>
+      <option value="Supermarché">🛒 Supermarché</option>
+    </select>
+    <button class="btn-primary" id="offer-save-btn">Ajouter l'offre</button>
+    <p class="msg" id="offer-msg"></p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 16px;font-family:'Manrope',sans-serif;">Offres en ligne</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Produit</th><th>Marchand</th><th>Prix</th><th>Actions</th></tr></thead>
+      <tbody id="offers-tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Avis sur les marchands <span id="reviews-count" style="color:var(--text-muted);font-weight:500;"></span></h3>
+    <p class="sub" style="margin:0 0 16px;">Les avis ne s'affichent sur le site qu'après ta validation.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Marchand</th><th>Note</th><th>Commentaire</th><th>Statut</th><th>Action</th></tr></thead>
+      <tbody id="reviews-tbody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Livraison par marchand</h3>
+    <p class="sub" style="margin:0 0 16px;">Texte court affiché sur chaque offre (ex : Livraison 1 500 FCFA · 24-48 h). Laisse vide pour ne rien afficher.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Marchand</th><th>Infos livraison</th><th></th></tr></thead>
+      <tbody id="deliv-tbody"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Inscrits aux alertes <span id="subs-count" style="color:var(--text-muted);font-weight:500;"></span></h3>
+    <p class="sub" style="margin:0 0 16px;">Numéros WhatsApp collectés via le bouton d'alerte. Utilise-les uniquement pour les alertes de prix et les bons plans (si la case est cochée).</p>
+    <div style="margin:0 0 12px;display:flex;gap:8px;flex-wrap:wrap;"><button type="button" id="subs-copy" style="padding:8px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;">Copier les numéros « bons plans »</button></div>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Contact</th><th>Alertes</th><th>Produits suivis</th><th>Bons plans</th><th>Dernière inscription</th></tr></thead>
+      <tbody id="subs-tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Alertes de prix déclenchées</h3>
+    <p class="sub" style="margin:0 0 16px;">Clients à recontacter — leur prix cible a été atteint.</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Produit</th><th>Cible</th><th>Prix actuel</th><th>Contact</th></tr></thead>
+      <tbody id="alerts-tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 6px;font-family:'Manrope',sans-serif;">Statistiques de clics</h3>
+    <p class="sub" style="margin:0 0 16px;">Combien de fois chaque marchand / produit a été cliqué.</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Type</th><th>Nom</th><th>Total</th><th>7 derniers jours</th></tr></thead>
+      <tbody id="stats-tbody"></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://bxljzktkxphdbalbmgcn.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_w3bjyu8CeKjESzbLI7eCkQ_xdGTo_qw";
+let ADMIN_SECRET = sessionStorage.getItem('kasaprix_admin_secret') || '';
+let merchants = [];
+
+async function rpc(name, body){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, {
+    method:'POST',
+    headers:{ apikey: SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function loadVisitStats(){
+  try{
+    const stats = await rpc('admin_visit_stats', { p_admin_secret: ADMIN_SECRET });
+    const s = stats[0];
+    document.getElementById('stat-total').textContent = s.total_visits;
+    document.getElementById('stat-7j').textContent = s.visits_7j;
+    document.getElementById('stat-today').textContent = s.visits_today;
+    const deviceEl = document.getElementById('stat-device');
+    if(deviceEl){
+      const mobile = s.mobile_7j || 0;
+      const desktop = s.desktop_7j || 0;
+      deviceEl.textContent = (mobile + desktop) > 0
+        ? `📱 ${mobile} mobile · 💻 ${desktop} ordinateur (7 derniers jours)`
+        : '';
+    }
+  }catch(e){}
+}
+
+async function loadMerchants(){
+  try{
+    merchants = await rpc('admin_list_merchants', { p_admin_secret: ADMIN_SECRET });
+    renderTable();
+    populateMerchantSelect();
+    loadOffers();
+    loadTriggeredAlerts();
+    loadSubscribers();
+    loadReviews();
+    loadDelivery();
+    loadClickStats();
+    loadVisitStats();
+  }catch(e){
+    document.getElementById('login-error').textContent = 'Mot de passe incorrect.';
+    sessionStorage.removeItem('kasaprix_admin_secret');
+    showLogin();
+  }
+}
+
+function renderTable(){
+  const tbody = document.getElementById('merchants-tbody');
+  if(merchants.length === 0){
+    tbody.innerHTML = `<tr><td colspan="6" style="color:var(--text-muted)">Aucun marchand pour l'instant.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = merchants.map(m => `
+    <tr>
+      <td><strong>${m.name}</strong></td>
+      <td>${m.city || '<span style="color:var(--text-muted)">—</span>'}</td>
+      <td><span class="pill ${m.partnership_type}">${m.partnership_type === 'direct' ? 'Direct' : 'Affiliate'}</span></td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)">${m.feed_url || '—'}</td>
+      <td>${m.is_active ? '<span class="pill direct">Actif</span>' : '<span class="pill inactive">Inactif</span>'}</td>
+      <td><code style="font-size:12px;background:var(--bg-soft);padding:2px 6px;border-radius:5px;">${m.merchant_access_code}</code></td>
+      <td><button class="link-edit" onclick="editMerchant('${m.id}')">Modifier</button></td>
+    </tr>
+  `).join('');
+}
+
+window.editMerchant = function(id){
+  const m = merchants.find(x => x.id === id);
+  if(!m) return;
+  document.getElementById('form-title').textContent = 'Modifier : ' + m.name;
+  document.getElementById('m-id').value = m.id;
+  document.getElementById('m-name').value = m.name || '';
+  document.getElementById('m-type').value = m.partnership_type || 'direct';
+  document.getElementById('m-tag').value = m.base_affiliate_tag || '';
+  document.getElementById('m-website').value = m.website_url || '';
+  document.getElementById('m-feed-url').value = m.feed_url || '';
+  document.getElementById('m-feed-format').value = m.feed_format || '';
+  document.getElementById('m-whatsapp').value = m.contact_whatsapp || '';
+  document.getElementById('m-phone').value = m.contact_phone || '';
+  document.getElementById('m-city').value = m.city || '';
+  document.getElementById('m-active').value = String(m.is_active);
+  window.scrollTo(0,0);
+};
+
+function resetForm(){
+  document.getElementById('form-title').textContent = 'Nouveau marchand';
+  ['m-id','m-name','m-tag','m-website','m-feed-url','m-whatsapp','m-phone','m-city'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('m-type').value = 'direct';
+  document.getElementById('m-feed-format').value = '';
+  document.getElementById('m-active').value = 'true';
+  document.getElementById('save-msg').textContent = '';
+}
+
+document.getElementById('cancel-btn').addEventListener('click', resetForm);
+
+document.getElementById('save-btn').addEventListener('click', async () => {
+  const msg = document.getElementById('save-msg');
+  const name = document.getElementById('m-name').value.trim();
+  if(!name){ msg.textContent = 'Le nom du marchand est requis.'; msg.className='msg error'; return; }
+  try{
+    await rpc('admin_upsert_merchant', {
+      p_admin_secret: ADMIN_SECRET,
+      p_id: document.getElementById('m-id').value || null,
+      p_name: name,
+      p_partnership_type: document.getElementById('m-type').value,
+      p_base_affiliate_tag: document.getElementById('m-tag').value.trim() || null,
+      p_feed_url: document.getElementById('m-feed-url').value.trim() || null,
+      p_feed_format: document.getElementById('m-feed-format').value || null,
+      p_contact_whatsapp: document.getElementById('m-whatsapp').value.trim() || null,
+      p_contact_phone: document.getElementById('m-phone').value.trim() || null,
+      p_city: document.getElementById('m-city').value.trim() || null,
+      p_website_url: document.getElementById('m-website').value.trim() || null,
+      p_is_active: document.getElementById('m-active').value === 'true'
+    });
+    msg.textContent = 'Marchand enregistré.';
+    msg.className = 'msg ok';
+    resetForm();
+    loadMerchants();
+  }catch(e){
+    msg.textContent = "Erreur : le tag d'affiliation est peut-être manquant pour un marchand affiliate.";
+    msg.className = 'msg error';
+  }
+});
+
+function populateMerchantSelect(){
+  const sel = document.getElementById('o-merchant');
+  sel.innerHTML = merchants.filter(m => m.is_active).map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+}
+
+async function loadOffers(){
+  try{
+    const offers = await rpc('admin_list_offers', { p_admin_secret: ADMIN_SECRET });
+    const tbody = document.getElementById('offers-tbody');
+    if(offers.length === 0){
+      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted)">Aucune offre pour l'instant.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = offers.map(o => {
+      const isSponsored = o.sponsored_until && new Date(o.sponsored_until) > new Date();
+      return `
+      <tr>
+        <td><strong>${o.product_name}</strong>${isSponsored ? ' <span class="pill sponsored">Sponsorisé</span>' : ''}</td>
+        <td>${o.merchant_name}</td>
+        <td>${Number(o.price_xof).toLocaleString('fr-FR')} FCFA</td>
+        <td style="white-space:nowrap;">
+          <button class="link-edit" onclick="toggleDeal('${o.product_id}', ${!o.is_deal})">${o.is_deal ? '⭐' : '☆'}</button>
+          &nbsp;·&nbsp;
+          <button class="link-edit" style="${isSponsored ? 'color:#B8860B;' : ''}" onclick="sponsorOffer('${o.offer_id}', ${isSponsored})">${isSponsored ? 'Retirer sponso' : 'Sponsoriser'}</button>
+          &nbsp;·&nbsp;
+          <button class="link-edit" style="color:var(--red);" onclick="deleteOffer('${o.offer_id}')">Supprimer</button>
+        </td>
+      </tr>
+    `;}).join('');
+  }catch(e){}
+}
+
+window.sponsorOffer = async function(offerId, isCurrentlySponsored){
+  if(isCurrentlySponsored){
+    try{
+      await rpc('admin_set_sponsored', { p_admin_secret: ADMIN_SECRET, p_offer_id: offerId, p_days: 0 });
+      loadOffers();
+    }catch(e){}
+    return;
+  }
+  const days = prompt("Sponsoriser cette offre pendant combien de jours ?", "7");
+  if(!days) return;
+  const n = parseInt(days, 10);
+  if(!n || n <= 0) return;
+  try{
+    await rpc('admin_set_sponsored', { p_admin_secret: ADMIN_SECRET, p_offer_id: offerId, p_days: n });
+    loadOffers();
+  }catch(e){}
+}
+
+window.deleteOffer = async function(offerId){
+  if(!confirm('Supprimer cette offre ?')) return;
+  try{
+    await rpc('admin_delete_offer', { p_admin_secret: ADMIN_SECRET, p_offer_id: offerId });
+    loadOffers();
+  }catch(e){}
+}
+
+window.toggleDeal = async function(productId, newValue){
+  try{
+    await rpc('admin_toggle_deal', { p_admin_secret: ADMIN_SECRET, p_product_id: productId, p_is_deal: newValue });
+    loadOffers();
+  }catch(e){}
+}
+
+document.getElementById('o-image-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  const statusEl = document.getElementById('o-image-status');
+  if(!file) return;
+  statusEl.textContent = 'Envoi de la photo…';
+  statusEl.className = 'msg';
+  try{
+    const ext = file.name.split('.').pop();
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/product-images/${path}`, {
+      method:'POST',
+      headers:{
+        apikey: SUPABASE_ANON_KEY,
+        Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+        'x-admin-secret': 'ed038530a964503690f16f3e1bed4f3b767081781810fc503f8a4598754673a1',
+        'Content-Type': file.type || 'application/octet-stream'
+      },
+      body: file
+    });
+    if(!res.ok) throw new Error(await res.text());
+    document.getElementById('o-image').value = `${SUPABASE_URL}/storage/v1/object/public/product-images/${path}`;
+    statusEl.textContent = '✓ Photo envoyée.';
+    statusEl.className = 'msg ok';
+  }catch(err){
+    statusEl.textContent = "Erreur lors de l'envoi de la photo.";
+    statusEl.className = 'msg error';
+  }
+});
+
+document.getElementById('offer-save-btn').addEventListener('click', async () => {
+  const msg = document.getElementById('offer-msg');
+  const name = document.getElementById('o-name').value.trim();
+  const merchantId = document.getElementById('o-merchant').value;
+  const price = parseFloat(document.getElementById('o-price').value);
+  const link = document.getElementById('o-link').value.trim();
+  if(!name || !merchantId || !price || !link){
+    msg.textContent = 'Nom, marchand, prix et lien sont requis.';
+    msg.className = 'msg error';
+    return;
+  }
+  try{
+    await rpc('admin_upsert_offer_manual', {
+      p_admin_secret: ADMIN_SECRET,
+      p_merchant_id: merchantId,
+      p_product_name: name,
+      p_brand: document.getElementById('o-brand').value.trim() || null,
+      p_price_xof: price,
+      p_in_stock: document.getElementById('o-stock').value === 'true',
+      p_link: link,
+      p_image_url: document.getElementById('o-image').value.trim() || null,
+      p_category_name: document.getElementById('o-category').value || null
+    });
+    msg.textContent = 'Offre ajoutée.';
+    msg.className = 'msg ok';
+    ['o-name','o-brand','o-price','o-link','o-image'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('o-image-file').value = '';
+    document.getElementById('o-image-status').textContent = '';
+    document.getElementById('o-category').value = '';
+    loadOffers();
+  }catch(e){
+    msg.textContent = "Erreur lors de l'ajout de l'offre.";
+    msg.className = 'msg error';
+  }
+});
+
+function _aesc(t){ return String(t == null ? '' : t).replace(/[&<>\x22\x27]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\x22':'&quot;','\x27':'&#39;'}[c])); }
+async function loadReviews(){
+  try{
+    const rows = await rpc('admin_list_reviews', { p_admin_secret: ADMIN_SECRET });
+    document.getElementById('reviews-count').textContent = '(' + rows.filter(x => x.status === 'pending').length + ' en attente)';
+    const tb = document.getElementById('reviews-tbody');
+    if(!rows.length){ tb.innerHTML = `<tr><td colspan='5' style='color:var(--text-muted)'>Aucun avis pour l'instant.</td></tr>`; return; }
+    tb.innerHTML = rows.map(x => `<tr><td><strong>${_aesc(x.merchant_name)}</strong></td><td>${'★'.repeat(x.rating)}</td><td>${_aesc(x.comment)}<br><small>${_aesc(x.author_name || '')}</small></td><td>${x.status === 'pending' ? 'À valider' : x.status === 'approved' ? 'Publié' : 'Refusé'}</td><td>${x.status !== 'approved' ? `<button data-rv='${x.id}' data-st='approved'>Publier</button> ` : ''}${x.status !== 'rejected' ? `<button data-rv='${x.id}' data-st='rejected'>Refuser</button>` : ''}</td></tr>`).join('');
+  }catch(e){}
+}
+document.getElementById('reviews-tbody').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-rv]'); if(!b) return;
+  b.disabled = true;
+  try{ await rpc('admin_moderate_review', { p_admin_secret: ADMIN_SECRET, p_id: b.dataset.rv, p_status: b.dataset.st }); }catch(err){}
+  loadReviews();
+});
+async function loadDelivery(){
+  try{
+    const rows = await rpc('admin_list_delivery_info', { p_admin_secret: ADMIN_SECRET });
+    document.getElementById('deliv-tbody').innerHTML = rows.map(x => `<tr><td><strong>${_aesc(x.name)}</strong></td><td><input data-di='${x.merchant_id}' value='${_aesc(x.delivery_info || '')}' maxlength='160' placeholder='Ex : Livraison 1 500 FCFA · 24-48 h' style='width:100%;min-width:220px'></td><td><button data-dm='${x.merchant_id}'>Enregistrer</button></td></tr>`).join('');
+  }catch(e){}
+}
+document.getElementById('deliv-tbody').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-dm]'); if(!b) return;
+  const inp = b.closest('tr').querySelector('input[data-di]');
+  b.disabled = true;
+  try{ await rpc('admin_set_delivery_info', { p_admin_secret: ADMIN_SECRET, p_merchant_id: b.dataset.dm, p_info: inp.value }); b.textContent = 'Enregistré ✓'; }catch(err){ b.textContent = 'Erreur'; }
+  setTimeout(() => { b.textContent = 'Enregistrer'; b.disabled = false; }, 1500);
+});
+
+async function loadSubscribers(){
+  try{
+    const subs = await rpc('admin_list_subscribers', { p_admin_secret: ADMIN_SECRET });
+    const tbody = document.getElementById('subs-tbody');
+    document.getElementById('subs-count').textContent = '(' + subs.length + ')';
+    const fmt = d => d ? new Date(d).toLocaleDateString('fr-FR') : '';
+    const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    window.__dealsNumbers = subs.filter(x => x.wants_deals).map(x => x.contact);
+    if(subs.length === 0){
+      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted)">Aucun inscrit pour l'instant.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = subs.map(x => `
+      <tr>
+        <td><strong>${esc(x.contact)}</strong></td>
+        <td>${Number(x.nb_alerts)}</td>
+        <td>${esc(Array.isArray(x.products) ? x.products.join(', ') : x.products)}</td>
+        <td>${x.wants_deals ? '✓ oui' : '—'}</td>
+        <td>${fmt(x.last_seen)}</td>
+      </tr>
+    `).join('');
+  }catch(e){}
+}
+document.getElementById('subs-copy').addEventListener('click', async () => {
+  const list = (window.__dealsNumbers || []).join('\n');
+  try{ await navigator.clipboard.writeText(list); alert((window.__dealsNumbers || []).length + ' numéro(s) copié(s)'); }catch(e){ prompt('Copie les numéros :', list); }
+});
+
+async function loadTriggeredAlerts(){
+  try{
+    const alerts = await rpc('admin_list_triggered_alerts', { p_admin_secret: ADMIN_SECRET });
+    const tbody = document.getElementById('alerts-tbody');
+    if(alerts.length === 0){
+      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted)">Aucune alerte déclenchée pour l'instant.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = alerts.map(a => `
+      <tr>
+        <td><strong>${a.product_name}</strong></td>
+        <td>${Number(a.target_price_xof).toLocaleString('fr-FR')} FCFA</td>
+        <td>${Number(a.current_min_price).toLocaleString('fr-FR')} FCFA</td>
+        <td>${a.contact} (${a.channel})</td>
+      </tr>
+    `).join('');
+  }catch(e){}
+}
+
+async function loadClickStats(){
+  try{
+    const stats = await rpc('admin_click_stats', { p_admin_secret: ADMIN_SECRET });
+    const tbody = document.getElementById('stats-tbody');
+    if(stats.length === 0){
+      tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-muted)">Aucun clic enregistré pour l'instant.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = stats.map(s => `
+      <tr>
+        <td><span class="pill ${s.scope === 'marchand' ? 'affiliate' : 'direct'}">${s.scope}</span></td>
+        <td><strong>${s.label}</strong></td>
+        <td>${s.total_clicks}</td>
+        <td>${s.clicks_7j}</td>
+      </tr>
+    `).join('');
+  }catch(e){}
+}
+
+function showLogin(){
+  document.getElementById('login-screen').style.display = 'block';
+  document.getElementById('admin-screen').style.display = 'none';
+}
+function showAdmin(){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-screen').style.display = 'block';
+  loadMerchants();
+}
+
+document.getElementById('login-btn').addEventListener('click', () => {
+  ADMIN_SECRET = document.getElementById('secret-input').value.trim();
+  sessionStorage.setItem('kasaprix_admin_secret', ADMIN_SECRET);
+  showAdmin();
+});
+
+if(ADMIN_SECRET) showAdmin(); else showLogin();
+</script>
+</body>
+</html>
